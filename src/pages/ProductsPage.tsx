@@ -196,7 +196,7 @@ const emptyForm: ProductForm = {
   isFeatured: false,
   isHandmade: true,
   isUniquePiece: true,
-  isPriceOnRequestOnlyInTunisia: false,
+isPriceOnRequestOnlyInTunisia: true,
 };
 
 const statusLabels: Record<ProductStatus, string> = {
@@ -507,7 +507,7 @@ export default function AdminProductsPage() {
       isFeatured: product.isFeatured,
       isHandmade: Boolean(product.isHandmade),
       isUniquePiece: Boolean(product.isUniquePiece),
-      isPriceOnRequestOnlyInTunisia: product.isPriceOnRequestOnlyInTunisia,
+      isPriceOnRequestOnlyInTunisia: product.isPriceOnRequestOnlyInTunisia ?? true,
     });
 
     setIsModalOpen(true);
@@ -1166,11 +1166,10 @@ const buildPayload = () => ({
 
                   <div className="detail-price-box">
                     <span>Prix</span>
-                    <strong>
-                      {viewProduct.isPriceOnRequestOnlyInTunisia
-                        ? "Sur demande"
-                        : `${viewProduct.price} €`}
-                    </strong>
+                    <strong>{viewProduct.price} €</strong>
+                    {viewProduct.isPriceOnRequestOnlyInTunisia && (
+                      <em>Sur demande pour la Tunisie</em>
+                    )}
                   </div>
                 </div>
 
