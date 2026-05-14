@@ -1,0 +1,28 @@
+@media (max-width: 900px) {
+  .price-request-details-page {
+    padding: 18px 14px 34px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .price-request-details-hero {
+    flex-direction: column !important;
+    padding: 22px !important;
+    border-radius: 26px !important;
+    gap: 16px !important;
+  }
+
+  .price-request-details-hero h1 {
+    font-size: 28px !important;
+  }
+
+  .price-request-details-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .price-request-details-card {
+    padding: 18px !important;
+    border-radius: 22px !important;
+  }
+}

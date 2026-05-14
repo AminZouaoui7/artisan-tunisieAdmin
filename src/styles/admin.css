@@ -1,0 +1,283 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-family: Inter, system-ui, sans-serif;
+  background: #17100f;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(180, 86, 49, 0.18), transparent 34%),
+    radial-gradient(circle at 82% 10%, rgba(215, 184, 132, 0.25), transparent 32%),
+    linear-gradient(135deg, #2f1f18 0%, #5a3828 48%, #efe0c5 100%);
+}
+
+.login-card {
+  width: min(460px, 100%);
+  padding: 42px;
+  border-radius: 32px;
+  background: rgba(255, 250, 242, 0.94);
+  border: 1px solid rgba(234, 216, 190, 0.8);
+  box-shadow: 0 35px 90px rgba(31, 20, 12, 0.28);
+}
+
+.login-badge {
+  width: 58px;
+  height: 58px;
+  border-radius: 22px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: linear-gradient(135deg, #9d4f2f, #c98a55);
+  margin-bottom: 22px;
+}
+
+.login-kicker {
+  margin: 0 0 8px;
+  color: #b45631;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.login-card h1 {
+  margin: 0;
+  color: #332018;
+  font-size: 34px;
+  line-height: 1;
+}
+
+.login-subtitle {
+  margin: 14px 0 28px;
+  color: #7d6758;
+  line-height: 1.7;
+}
+
+.login-card form {
+  display: grid;
+  gap: 18px;
+}
+
+.login-card label {
+  display: grid;
+  gap: 8px;
+  color: #3d2a20;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.login-field {
+  height: 54px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid #ead8be;
+  color: #9d4f2f;
+}
+
+.login-field input {
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #332018;
+  font-size: 15px;
+}
+
+.login-card button {
+  height: 56px;
+  border: 0;
+  border-radius: 18px;
+  cursor: pointer;
+  color: #fff;
+  font-weight: 900;
+  background: linear-gradient(135deg, #3b2526, #9d4f2f);
+  box-shadow: 0 18px 35px rgba(92, 49, 30, 0.22);
+}
+
+.login-card button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.login-error {
+  margin: 0;
+  color: #a33b2d;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+:root {
+  --am-ink: #151515;
+  --am-ink-soft: #242424;
+  --am-cream: #e7e6c2;
+  --am-cream-light: #f8f5ea;
+  --am-teal: #2f6371;
+  --am-terracotta: #9f4f49;
+  --am-orange: #d8782f;
+  --am-burgundy: #4b3035;
+  --am-border: rgba(231, 230, 194, 0.22);
+} 
+
+@media (max-width: 760px) {
+  .admin-page-header,
+  .products-page-header,
+  .orders-page-header,
+  .customers-page-header,
+  .bookings-page-header,
+  .price-requests-page-header,
+  .dashboard-page-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+  }
+
+  .admin-page-title,
+  .products-page-title,
+  .orders-page-title,
+  .customers-page-title,
+  .bookings-page-title,
+  .price-requests-page-title,
+  .dashboard-page-title {
+    font-size: 26px !important;
+    line-height: 1.1 !important;
+  }
+
+  .admin-filters,
+  .products-filters,
+  .orders-filters,
+  .customers-filters,
+  .bookings-filters,
+  .price-requests-filters {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  .admin-filters input,
+  .admin-filters select,
+  .products-filters input,
+  .products-filters select,
+  .orders-filters input,
+  .orders-filters select,
+  .customers-filters input,
+  .customers-filters select,
+  .bookings-filters input,
+  .bookings-filters select,
+  .price-requests-filters input,
+  .price-requests-filters select {
+    width: 100% !important;
+  }
+
+  .admin-stats-grid,
+  .dashboard-stats-grid,
+  .products-stats-grid,
+  .orders-stats-grid,
+  .customers-stats-grid,
+  .bookings-stats-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .admin-card,
+  .dashboard-card,
+  .product-card,
+  .order-card,
+  .customer-card,
+  .booking-card,
+  .price-request-card {
+    border-radius: 20px !important;
+  }
+
+  .admin-table-wrapper,
+  .orders-table-wrapper,
+  .customers-table-wrapper,
+  .bookings-table-wrapper,
+  .price-requests-table-wrapper {
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    border-radius: 18px !important;
+  }
+
+  table {
+    min-width: 760px !important;
+  }
+
+  .admin-actions,
+  .product-actions,
+  .order-actions,
+  .customer-actions,
+  .booking-actions {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  .admin-actions button,
+  .product-actions button,
+  .order-actions button,
+  .customer-actions button,
+  .booking-actions button {
+    flex: 1 1 auto !important;
+    min-height: 40px !important;
+  }
+
+  /* MODALS RESPONSIVE */
+  .admin-modal,
+  .product-modal,
+  .order-modal,
+  .customer-modal,
+  .booking-modal,
+  .price-request-modal {
+    padding: 10px !important;
+    align-items: flex-end !important;
+  }
+
+  .admin-modal-card,
+  .product-modal-card,
+  .order-modal-card,
+  .customer-modal-card,
+  .booking-modal-card,
+  .price-request-modal-card {
+    width: 100% !important;
+    max-height: 92vh !important;
+    overflow-y: auto !important;
+
+    border-radius: 24px 24px 0 0 !important;
+    padding: 18px !important;
+  }
+
+  .admin-modal-grid,
+  .product-modal-grid,
+  .order-modal-grid,
+  .customer-modal-grid,
+  .booking-modal-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
