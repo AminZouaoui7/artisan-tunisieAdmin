@@ -11,8 +11,11 @@ import PriceRequestsPage from "./pages/PriceRequestsPage";
 
 import AdminLayout from "./components/AdminLayout";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
+import { isAdminAuthenticated } from "./services/adminAuthService";
 
 export default function App() {
+  const isAuthenticated = isAdminAuthenticated();
+
   return (
     <BrowserRouter>
       <Routes>
@@ -37,8 +40,24 @@ export default function App() {
           <Route path="/price-requests" element={<PriceRequestsPage />} />
         </Route>
 
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        <Route
+          path="/"
+          element={
+            <Navigate
+              to={isAuthenticated ? "/dashboard" : "/login"}
+              replace
+            />
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <Navigate
+              to={isAuthenticated ? "/dashboard" : "/login"}
+              replace
+            />
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

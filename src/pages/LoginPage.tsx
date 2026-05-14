@@ -1,17 +1,29 @@
 import { useState, type FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { Lock, Mail } from "lucide-react";
-import { loginAdmin } from "../services/adminAuthService";
+import {
+  isAdminAuthenticated,
+  loginAdmin,
+} from "../services/adminAuthService";
 import logo from "../assets/color white.png";
 
 import "../styles/LoginPage.css";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState("admin@artisanmadina.com");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const redirectPath =
+    (location.state as { from?: { pathname?: string } } | null)?.from
+      ?.pathname || "/dashboard";
+
+  if (isAdminAuthenticated()) {
+    return <Navigate to={redirectPath} replace />;
+  }
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
@@ -25,19 +37,17 @@ export default function LoginPage() {
     try {
       setLoading(true);
 
-      const result = await loginAdmin({
+      await loginAdmin({
         email: email.trim(),
         password,
       });
 
-      console.log("LOGIN RESULT:", result);
-      console.log("TOKEN SAVED:", localStorage.getItem("artisan_admin_token"));
-      console.log("NAVIGATE TO DASHBOARD");
-
-      navigate("/dashboard", { replace: true });
+      navigate(redirectPath, { replace: true });
     } catch (err) {
       console.error("LOGIN ERROR:", err);
-      setError("Email ou mot de passe incorrect.");
+      setError(
+        err instanceof Error ? err.message : "Email ou mot de passe incorrect."
+      );
     } finally {
       setLoading(false);
     }

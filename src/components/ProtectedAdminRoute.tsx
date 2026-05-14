@@ -1,5 +1,6 @@
 import { Navigate, useLocation } from "react-router-dom";
 import type { ReactNode } from "react";
+import { isAdminAuthenticated } from "../services/adminAuthService";
 
 export default function ProtectedAdminRoute({
   children,
@@ -8,13 +9,9 @@ export default function ProtectedAdminRoute({
 }) {
   const location = useLocation();
 
-  const token =
-    localStorage.getItem("artisan_admin_token") ||
-    localStorage.getItem("artisan_admin_access_token");
-
-  if (!token) {
+  if (!isAdminAuthenticated()) {
     return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
   return <>{children}</>;
-} 
+}
