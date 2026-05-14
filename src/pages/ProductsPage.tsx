@@ -1,7 +1,6 @@
 import {
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
   type ChangeEvent,
@@ -26,6 +25,11 @@ import {
   UploadCloud,
   X,
 } from "lucide-react";
+import {
+  buildApiUrl,
+  buildBackendUrl,
+  getAdminToken,
+} from "../services/adminApi";
 import "../styles/ProductsPage.css";
 
 type ProductStatus = "Available" | "Reserved" | "Sold" | "Hidden";
@@ -164,8 +168,6 @@ type ProductForm = {
   isPriceOnRequestOnlyInTunisia: boolean;
 };
 
-const API_BASE_URL = "http://localhost:5163";
-
 const emptyForm: ProductForm = {
   name: "",
   slug: "",
@@ -300,21 +302,17 @@ export default function AdminProductsPage() {
   const toastTimersRef = useRef<Record<number, ReturnType<typeof setTimeout>>>({});
   const didInitDebouncedSearchRef = useRef(false);
 
-  const token = useMemo(
-    () =>
-      localStorage.getItem("artisan_admin_token") ||
-      localStorage.getItem("admin_token") ||
-      localStorage.getItem("artisan_access_token") ||
-      "",
+  const authHeaders = useCallback(
+    (withJson = false) => {
+      const token = getAdminToken();
+
+      return {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...(withJson ? { "Content-Type": "application/json" } : {}),
+      };
+    },
     []
   );
-
-  const authHeaders = { Authorization: `Bearer ${token}` };
-
-  const jsonHeaders = {
-    Authorization: `Bearer ${token}`,
-    "Content-Type": "application/json",
-  };
 
   const removeToast = useCallback((id: number) => {
     const existingTimer = toastTimersRef.current[id];
@@ -380,8 +378,7 @@ export default function AdminProductsPage() {
 
   const getImageUrl = (url?: string | null) => {
     if (!url) return "";
-    if (url.startsWith("http")) return url;
-    return `${API_BASE_URL}${url}`;
+    return buildBackendUrl(url);
   };
 
   const fetchProducts = useCallback(async (options?: FetchProductsOptions) => {
@@ -407,8 +404,8 @@ export default function AdminProductsPage() {
       if (activeToUse) params.append("active", activeToUse);
       if (featuredToUse) params.append("featured", featuredToUse);
 
-      const response = await fetch(`${API_BASE_URL}/api/admin/products?${params}`, {
-        headers: authHeaders,
+      const response = await fetch(buildApiUrl(`/admin/products?${params}`), {
+        headers: authHeaders(),
       });
 
       if (response.status === 401 || response.status === 403) {
@@ -585,10 +582,10 @@ const buildPayload = () => ({
         data.append("isMain", String(index === 0));
 
         const response = await fetch(
-          `${API_BASE_URL}/api/admin/products/${productId}/images/upload`,
+          buildApiUrl(`/admin/products/${productId}/images/upload`),
           {
             method: "POST",
-            headers: authHeaders,
+            headers: authHeaders(),
             body: data,
           }
         );
@@ -631,14 +628,11 @@ const buildPayload = () => ({
       setSaving(true);
 
       if (editingProduct) {
-        const response = await fetch(
-          `${API_BASE_URL}/api/admin/products/${editingProduct.id}`,
-          {
-            method: "PUT",
-            headers: jsonHeaders,
-            body: JSON.stringify(payload),
-          }
-        );
+        const response = await fetch(buildApiUrl(`/admin/products/${editingProduct.id}`), {
+          method: "PUT",
+          headers: authHeaders(true),
+          body: JSON.stringify(payload),
+        });
 
         if (!response.ok) {
           const apiError = await parseErrorResponse(
@@ -659,18 +653,18 @@ const buildPayload = () => ({
           });
         }
 
-        await fetch(`${API_BASE_URL}/api/admin/products/${editingProduct.id}/status`, {
+        await fetch(buildApiUrl(`/admin/products/${editingProduct.id}/status`), {
           method: "PATCH",
-          headers: jsonHeaders,
+          headers: authHeaders(true),
           body: JSON.stringify({ status: mappedStatus }),
         });
 
         await uploadImages(editingProduct.id);
         showSuccessToast("Produit modifié avec succès.");
       } else {
-        const response = await fetch(`${API_BASE_URL}/api/admin/products`, {
+        const response = await fetch(buildApiUrl("/admin/products"), {
           method: "POST",
-          headers: jsonHeaders,
+          headers: authHeaders(true),
           body: JSON.stringify(payload),
         });
 
@@ -690,9 +684,9 @@ const buildPayload = () => ({
 
         const created = await response.json();
 
-        await fetch(`${API_BASE_URL}/api/admin/products/${created.id}/status`, {
+        await fetch(buildApiUrl(`/admin/products/${created.id}/status`), {
           method: "PATCH",
-          headers: jsonHeaders,
+          headers: authHeaders(true),
           body: JSON.stringify({ status: mappedStatus }),
         });
 
@@ -729,9 +723,9 @@ const buildPayload = () => ({
     try {
       setActionLoadingId(id);
 
-      const response = await fetch(`${API_BASE_URL}/api/admin/products/${id}/status`, {
+      const response = await fetch(buildApiUrl(`/admin/products/${id}/status`), {
         method: "PATCH",
-        headers: jsonHeaders,
+        headers: authHeaders(true),
         body: JSON.stringify({ status: "Hidden" as ProductStatus }),
       });
 
@@ -776,9 +770,9 @@ const buildPayload = () => ({
     if (!editingProduct) return;
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/admin/products/images/${imageId}`, {
+      const response = await fetch(buildApiUrl(`/admin/products/images/${imageId}`), {
         method: "DELETE",
-        headers: authHeaders,
+        headers: authHeaders(),
       });
 
       if (!response.ok) {
@@ -794,8 +788,8 @@ const buildPayload = () => ({
       }
 
       const fresh = await fetch(
-        `${API_BASE_URL}/api/admin/products/${editingProduct.id}`,
-        { headers: authHeaders }
+        buildApiUrl(`/admin/products/${editingProduct.id}`),
+        { headers: authHeaders() }
       );
 
       const data = await fresh.json();
@@ -826,10 +820,10 @@ const buildPayload = () => ({
 
     try {
       const response = await fetch(
-        `${API_BASE_URL}/api/admin/products/${editingProduct.id}/images/${imageId}/main`,
+        buildApiUrl(`/admin/products/${editingProduct.id}/images/${imageId}/main`),
         {
           method: "PATCH",
-          headers: authHeaders,
+          headers: authHeaders(),
         }
       );
 
@@ -846,8 +840,8 @@ const buildPayload = () => ({
       }
 
       const fresh = await fetch(
-        `${API_BASE_URL}/api/admin/products/${editingProduct.id}`,
-        { headers: authHeaders }
+        buildApiUrl(`/admin/products/${editingProduct.id}`),
+        { headers: authHeaders() }
       );
 
       const data = await fresh.json();

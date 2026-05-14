@@ -559,32 +559,3 @@ export default function CustomersPage() {
     </main>
   );
 }
-
-function CustomerSection({
-  icon,
-  title,
-  empty,
-  children,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  empty: string;
-  children: React.ReactNode;
-}) {
-  const hasChildren = Array.isArray(children)
-    ? children.length > 0
-    : Boolean(children);
-
-  return (
-    <section className="customer-detail-card">
-      <div className="customer-section-title">
-        {icon}
-        <h3>{title}</h3>
-      </div>
-
-      <div className="customer-section-list">
-        {hasChildren ? children : <p className="customer-empty-text">{empty}</p>}
-      </div>
-    </section>
-  );
-}

@@ -1,24 +1,4 @@
-import axios from "axios";
-
-const API_URL = "http://localhost:5163/api/admin/price-requests";
-
-function getAdminToken() {
-  return (
-    localStorage.getItem("artisan_admin_token") ||
-    localStorage.getItem("artisan_admin_access_token")
-  );
-}
-
-function authHeaders() {
-  const token = getAdminToken();
-
-  return {
-    headers: {
-      Authorization: token ? `Bearer ${token}` : "",
-      "Content-Type": "application/json",
-    },
-  };
-}
+import { adminApi } from "./adminApi";
 
 export type PriceRequestStatus = "Pending" | "Answered" | "Closed" | string;
 
@@ -58,18 +38,16 @@ export type AdminPriceRequestDetails = {
 };
 
 export async function getAdminPriceRequests() {
-  const response = await axios.get<AdminPriceRequestListItem[]>(
-    API_URL,
-    authHeaders()
+  const response = await adminApi.get<AdminPriceRequestListItem[]>(
+    "/admin/price-requests"
   );
 
   return response.data;
 }
 
 export async function getAdminPriceRequestById(id: string) {
-  const response = await axios.get<AdminPriceRequestDetails>(
-    `${API_URL}/${id}`,
-    authHeaders()
+  const response = await adminApi.get<AdminPriceRequestDetails>(
+    `/admin/price-requests/${id}`
   );
 
   return response.data;
@@ -82,17 +60,16 @@ export async function sendAdminPriceRequestEmail(
     contactPhone: string;
   }
 ) {
-  const response = await axios.post<{
+  const response = await adminApi.post<{
     message: string;
     id: string;
     status: PriceRequestStatus;
   }>(
-    `${API_URL}/${id}/send-email`,
+    `/admin/price-requests/${id}/send-email`,
     {
       message: data.message,
       contactPhone: data.contactPhone,
-    },
-    authHeaders()
+    }
   );
 
   return response.data;
@@ -102,10 +79,9 @@ export async function updateAdminPriceRequestStatus(
   id: string,
   status: PriceRequestStatus
 ) {
-  const response = await axios.put<{ message: string }>(
-    `${API_URL}/${id}/status`,
-    { status },
-    authHeaders()
+  const response = await adminApi.put<{ message: string }>(
+    `/admin/price-requests/${id}/status`,
+    { status }
   );
 
   return response.data;

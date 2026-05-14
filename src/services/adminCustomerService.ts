@@ -1,23 +1,4 @@
-import axios from "axios";
-
-const API_URL = "http://localhost:5163/api/admin/customers";
-
-function getAdminToken() {
-  return (
-    localStorage.getItem("artisan_admin_token") ||
-    localStorage.getItem("artisan_admin_access_token")
-  );
-}
-
-function authHeaders() {
-  const token = getAdminToken();
-
-  return {
-    headers: {
-      Authorization: token ? `Bearer ${token}` : "",
-    },
-  };
-}
+import { adminApi } from "./adminApi";
 
 export type AdminCustomerListItem = {
   id: number;
@@ -64,32 +45,33 @@ export async function getAdminCustomers(
   search = "",
   active: boolean | null = null
 ) {
-  const params = new URLSearchParams();
+  const response = await adminApi.get<AdminCustomerListItem[]>(
+    "/admin/customers",
+    {
+      params: {
+        ...(search.trim() ? { search: search.trim() } : {}),
+        ...(active !== null ? { active } : {}),
+      },
+    }
+  );
 
-  if (search.trim()) params.append("search", search.trim());
-  if (active !== null) params.append("active", String(active));
-
-  const url = params.toString() ? `${API_URL}?${params.toString()}` : API_URL;
-
-  const response = await axios.get<AdminCustomerListItem[]>(url, authHeaders());
   return response.data;
 }
 
 export async function getAdminCustomerById(id: number) {
-  const response = await axios.get<AdminCustomerDetails>(
-    `${API_URL}/${id}`,
-    authHeaders()
+  const response = await adminApi.get<AdminCustomerDetails>(
+    `/admin/customers/${id}`
   );
 
   return response.data;
 }
 
 export async function toggleAdminCustomerActive(id: number) {
-  const response = await axios.patch<{
+  const response = await adminApi.patch<{
     message: string;
     id: number;
     isActive: boolean;
-  }>(`${API_URL}/${id}/toggle-active`, {}, authHeaders());
+  }>(`/admin/customers/${id}/toggle-active`);
 
   return response.data;
 }

@@ -2,9 +2,7 @@ import {
   ArrowLeft,
   CalendarDays,
   CheckCircle2,
-  Clock3,
   CreditCard,
-  FileText,
   Loader2,
   Mail,
   MapPin,
@@ -16,9 +14,8 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { adminFetch, buildBackendUrl } from "../services/adminApi";
 import "../styles/OrderDetailsPage.css";
-
-const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:5163";
 
 type OrderItem = {
   id: number;
@@ -62,34 +59,6 @@ type OrderDetails = {
   items: OrderItem[];
 };
 
-function getToken() {
-  return (
-    localStorage.getItem("artisan_admin_token") ||
-    localStorage.getItem("artisan_access_token") ||
-    localStorage.getItem("token") ||
-    ""
-  );
-}
-
-async function apiRequest<T>(url: string): Promise<T> {
-  const token = getToken();
-
-  const response = await fetch(`${API_BASE_URL}${url}`, {
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-  });
-
-  const data = await response.json().catch(() => null);
-
-  if (!response.ok) {
-    throw new Error(data?.message || "Erreur chargement commande.");
-  }
-
-  return data as T;
-}
-
 const statusLabel: Record<string, string> = {
   Pending: "En attente",
   Confirmed: "Confirmée",
@@ -125,7 +94,7 @@ export default function OrderDetailsPage() {
 
       try {
         setLoading(true);
-        const data = await apiRequest<OrderDetails>(`/api/admin/orders/${id}`);
+        const data = await adminFetch<OrderDetails>(`/admin/orders/${id}`);
         setOrder(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Commande introuvable.");
@@ -394,7 +363,7 @@ export default function OrderDetailsPage() {
                     src={
                       item.product.mainImageUrl.startsWith("http")
                         ? item.product.mainImageUrl
-                        : `${API_BASE_URL}${item.product.mainImageUrl}`
+                        : buildBackendUrl(item.product.mainImageUrl)
                     }
                     alt={item.productName}
                   />

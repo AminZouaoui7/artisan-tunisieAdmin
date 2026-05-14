@@ -18,9 +18,8 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { adminFetch } from "../services/adminApi";
 import "../styles/OrdersPage.css";
-
-const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:5163";
 
 type OrderStatus = "Pending" | "Confirmed" | "Shipped" | "Delivered" | "Cancelled";
 type PaymentStatus = "Unpaid" | "AwaitingBankTransfer" | "Paid";
@@ -86,36 +85,6 @@ const shippingStatusLabels: Record<string, string> = {
   Delivered: "Livrée",
 };
 
-function getToken() {
-  return (
-    localStorage.getItem("artisan_admin_token") ||
-    localStorage.getItem("artisan_access_token") ||
-    localStorage.getItem("token") ||
-    ""
-  );
-}
-
-async function apiRequest<T>(url: string, options?: RequestInit): Promise<T> {
-  const token = getToken();
-
-  const response = await fetch(`${API_BASE_URL}${url}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(options?.headers ?? {}),
-    },
-  });
-
-  const data = await response.json().catch(() => null);
-
-  if (!response.ok) {
-    throw new Error(data?.message || "Une erreur est survenue.");
-  }
-
-  return data as T;
-}
-
 export default function OrdersPage() {
   const navigate = useNavigate();
 
@@ -157,7 +126,9 @@ export default function OrdersPage() {
       if (search.trim()) params.append("search", search.trim());
 
       const query = params.toString();
-      const data = await apiRequest<AdminOrder[]>(`/api/admin/orders${query ? `?${query}` : ""}`);
+      const data = await adminFetch<AdminOrder[]>(
+        `/admin/orders${query ? `?${query}` : ""}`
+      );
 
       setOrders(data);
     } catch (error) {
@@ -266,7 +237,7 @@ export default function OrdersPage() {
       await runAction(
         order.id,
         "validate",
-        () => apiRequest(`/api/admin/orders/${order.id}/validate`, { method: "PATCH" }),
+        () => adminFetch(`/admin/orders/${order.id}/validate`, { method: "PATCH" }),
         "Commande validée et email envoyé au client."
       );
     }
@@ -275,7 +246,7 @@ export default function OrdersPage() {
       await runAction(
         order.id,
         "paid",
-        () => apiRequest(`/api/admin/orders/${order.id}/mark-paid`, { method: "PATCH" }),
+        () => adminFetch(`/admin/orders/${order.id}/mark-paid`, { method: "PATCH" }),
         "Paiement confirmé, facture envoyée et commande mise en préparation."
       );
     }
@@ -284,7 +255,7 @@ export default function OrdersPage() {
       await runAction(
         order.id,
         "cancel",
-        () => apiRequest(`/api/admin/orders/${order.id}/cancel`, { method: "PATCH" }),
+        () => adminFetch(`/admin/orders/${order.id}/cancel`, { method: "PATCH" }),
         "Commande annulée et stock restauré."
       );
     }
@@ -294,7 +265,7 @@ export default function OrdersPage() {
         order.id,
         "shipping",
         () =>
-          apiRequest(`/api/admin/orders/${order.id}/shipping`, {
+          adminFetch(`/admin/orders/${order.id}/shipping`, {
             method: "PATCH",
             body: JSON.stringify({
               status: "Shipped",

@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Bell,
   CalendarCheck,
-  ChevronDown,
   LogOut,
   Menu,
   MessageSquareText,

@@ -1,6 +1,4 @@
-// src/services/adminAuthService.ts
-
-const API_URL = "http://localhost:5163/api/admin/auth/login";
+import { adminApi } from "./adminApi";
 
 type AdminLoginRequest = {
   email: string;
@@ -20,19 +18,11 @@ type AdminLoginResponse = {
 export async function loginAdmin(
   data: AdminLoginRequest
 ): Promise<AdminLoginResponse> {
-  const response = await fetch(API_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    throw new Error("Login admin failed");
-  }
-
-  const result: AdminLoginResponse = await response.json();
+  const response = await adminApi.post<AdminLoginResponse>(
+    "/admin/auth/login",
+    data
+  );
+  const result = response.data;
 
   localStorage.setItem("artisan_admin_token", result.token);
   localStorage.setItem("artisan_admin_user", JSON.stringify(result.admin));

@@ -1,23 +1,4 @@
-import axios from "axios";
-
-const API_URL = "http://localhost:5163/api/admin/demo-bookings";
-
-function getAdminToken() {
-  return (
-    localStorage.getItem("artisan_admin_token") ||
-    localStorage.getItem("artisan_admin_access_token")
-  );
-}
-
-function authHeaders() {
-  const token = getAdminToken();
-
-  return {
-    headers: {
-      Authorization: token ? `Bearer ${token}` : "",
-    },
-  };
-}
+import { adminApi } from "./adminApi";
 
 export type BookingStatus =
   | "Pending"
@@ -62,44 +43,33 @@ export type BookingActionResponse = {
 };
 
 export async function getAdminBookings(status?: string) {
-  const url =
-    status && status !== "All"
-      ? `${API_URL}?status=${encodeURIComponent(status)}`
-      : API_URL;
+  const response = await adminApi.get<AdminBooking[]>("/admin/demo-bookings", {
+    params: status && status !== "All" ? { status } : undefined,
+  });
 
-  const response = await axios.get<AdminBooking[]>(url, authHeaders());
   return response.data;
 }
 
 export async function getAdminBookingById(id: number) {
-  const response = await axios.get<AdminBooking>(
-    `${API_URL}/${id}`,
-    authHeaders()
+  const response = await adminApi.get<AdminBooking>(
+    `/admin/demo-bookings/${id}`
   );
 
   return response.data;
 }
 
 export async function acceptAdminBooking(id: number) {
-  const response = await axios.patch<BookingActionResponse>(
-    `${API_URL}/${id}/accept`,
-    {},
-    authHeaders()
+  const response = await adminApi.patch<BookingActionResponse>(
+    `/admin/demo-bookings/${id}/accept`
   );
-
-  console.log("ACCEPT BOOKING RESPONSE:", response.data);
 
   return response.data;
 }
 
 export async function refuseAdminBooking(id: number) {
-  const response = await axios.patch<BookingActionResponse>(
-    `${API_URL}/${id}/refuse`,
-    {},
-    authHeaders()
+  const response = await adminApi.patch<BookingActionResponse>(
+    `/admin/demo-bookings/${id}/refuse`
   );
-
-  console.log("REFUSE BOOKING RESPONSE:", response.data);
 
   return response.data;
 }
@@ -108,13 +78,10 @@ export async function updateAdminBookingStatus(
   id: number,
   status: BookingStatus
 ) {
-  const response = await axios.patch<BookingActionResponse>(
-    `${API_URL}/${id}/status`,
-    { status },
-    authHeaders()
+  const response = await adminApi.patch<BookingActionResponse>(
+    `/admin/demo-bookings/${id}/status`,
+    { status }
   );
-
-  console.log("UPDATE BOOKING STATUS RESPONSE:", response.data);
 
   return response.data;
 }
