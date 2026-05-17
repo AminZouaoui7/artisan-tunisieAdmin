@@ -559,33 +559,35 @@ export default function OrdersPage() {
               ×
             </button>
 
-            <div className="orders-modal-icon">
-              <Truck size={26} />
+            <div className="orders-modal-body admin-modal-body admin-modal-scrollbar">
+              <div className="orders-modal-icon">
+                <Truck size={26} />
+              </div>
+
+              <h2>Expédier la commande</h2>
+              <p>
+                Commande <strong>{getOrderReference(shippingModalOrder)}</strong> — le client
+                recevra un email avec le transporteur et le numéro de suivi.
+              </p>
+
+              <label>
+                Transporteur
+                <input
+                  value={shippingProvider}
+                  onChange={(e) => setShippingProvider(e.target.value)}
+                  placeholder="DHL, FedEx, UPS..."
+                />
+              </label>
+
+              <label>
+                Numéro de suivi
+                <input
+                  value={trackingNumber}
+                  onChange={(e) => setTrackingNumber(e.target.value)}
+                  placeholder="Ex: 123456789"
+                />
+              </label>
             </div>
-
-            <h2>Expédier la commande</h2>
-            <p>
-              Commande <strong>{getOrderReference(shippingModalOrder)}</strong> — le client
-              recevra un email avec le transporteur et le numéro de suivi.
-            </p>
-
-            <label>
-              Transporteur
-              <input
-                value={shippingProvider}
-                onChange={(e) => setShippingProvider(e.target.value)}
-                placeholder="DHL, FedEx, UPS..."
-              />
-            </label>
-
-            <label>
-              Numéro de suivi
-              <input
-                value={trackingNumber}
-                onChange={(e) => setTrackingNumber(e.target.value)}
-                placeholder="Ex: 123456789"
-              />
-            </label>
 
             <div className="orders-modal-actions admin-modal-actions">
               <button className="orders-secondary-btn" onClick={() => setShippingModalOrder(null)}>
@@ -620,29 +622,31 @@ export default function OrdersPage() {
               <X size={18} />
             </button>
 
-            <div className="orders-confirm-icon">
-              <AlertTriangle size={28} />
-            </div>
+            <div className="orders-modal-body admin-modal-body admin-modal-scrollbar">
+              <div className="orders-confirm-icon">
+                <AlertTriangle size={28} />
+              </div>
 
-            <h2>{confirmAction.title}</h2>
+              <h2>{confirmAction.title}</h2>
 
-            <p>{confirmAction.message}</p>
+              <p>{confirmAction.message}</p>
 
-            <div className="orders-confirm-summary">
-              <span>Commande</span>
-              <strong>{getOrderReference(confirmAction.order)}</strong>
-            </div>
+              <div className="orders-confirm-summary">
+                <span>Commande</span>
+                <strong>{getOrderReference(confirmAction.order)}</strong>
+              </div>
 
-            <div className="orders-confirm-summary">
-              <span>Client</span>
-              <strong>{confirmAction.order.customerName}</strong>
-            </div>
+              <div className="orders-confirm-summary">
+                <span>Client</span>
+                <strong>{confirmAction.order.customerName}</strong>
+              </div>
 
-            <div className="orders-confirm-summary">
-              <span>Montant</span>
-              <strong>
-                {formatPrice(confirmAction.order.totalAmount, confirmAction.order.currency)}
-              </strong>
+              <div className="orders-confirm-summary">
+                <span>Montant</span>
+                <strong>
+                  {formatPrice(confirmAction.order.totalAmount, confirmAction.order.currency)}
+                </strong>
+              </div>
             </div>
 
             <div className="orders-modal-actions admin-modal-actions">

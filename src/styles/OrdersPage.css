@@ -417,7 +417,10 @@
   background: #fffaf6;
   border: 1px solid rgba(180, 86, 49, 0.14);
   box-shadow: 0 30px 100px rgba(0, 0, 0, 0.22);
-  overflow-y: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .orders-modal-close {
@@ -483,6 +486,13 @@
   gap: 12px;
   margin-top: 22px;
   flex-wrap: wrap;
+}
+
+.orders-modal-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .orders-details-total {
@@ -684,7 +694,7 @@
   .orders-confirm-modal {
     width: calc(100vw - 24px) !important;
     max-height: 88vh !important;
-    overflow-y: auto !important;
+    overflow: hidden !important;
     border-radius: 24px !important;
     padding: 20px !important;
   }
@@ -718,7 +728,10 @@
   background: #fffaf6;
   border: 1px solid rgba(180, 86, 49, 0.14);
   box-shadow: 0 30px 100px rgba(0, 0, 0, 0.22);
-  overflow-y: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .orders-confirm-icon {

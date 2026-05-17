@@ -663,12 +663,14 @@ export default function BookingsPage() {
       {confirmAction && (
         <div className="booking-confirm-overlay admin-modal">
           <section className="booking-confirm-modal admin-modal-content">
-            <div className={`booking-confirm-icon ${confirmAction.kind}`}>
-              <AlertTriangle size={26} />
-            </div>
+            <div className="booking-confirm-body admin-modal-body">
+              <div className={`booking-confirm-icon ${confirmAction.kind}`}>
+                <AlertTriangle size={26} />
+              </div>
 
-            <h3>{confirmAction.title}</h3>
-            <p>{confirmAction.message}</p>
+              <h3>{confirmAction.title}</h3>
+              <p>{confirmAction.message}</p>
+            </div>
 
             <div className="booking-confirm-actions admin-modal-actions">
               <button

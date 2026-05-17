@@ -596,7 +596,7 @@ L’Artisan de la Médina`;
               <X size={20} />
             </button>
 
-            <div className="history-modal-header">
+            <div className="history-modal-header admin-modal-header">
               <div className="premium-title-icon">
                 <Clock size={20} />
               </div>
@@ -608,7 +608,7 @@ L’Artisan de la Médina`;
               </div>
             </div>
 
-            <div className="history-modal-list premium-timeline">
+            <div className="history-modal-list premium-timeline admin-modal-body admin-modal-scrollbar">
               {selectedRequest.messages.length === 0 ? (
                 <p className="price-request-empty-text">
                   Aucun message enregistré.
@@ -647,15 +647,17 @@ L’Artisan de la Médina`;
       {confirmSend && selectedRequest && (
         <div className="price-request-confirm-overlay admin-modal">
           <section className="price-request-confirm-modal admin-modal-content">
-            <div className="price-request-confirm-icon">
-              <AlertTriangle size={26} />
-            </div>
+            <div className="price-request-confirm-body admin-modal-body">
+              <div className="price-request-confirm-icon">
+                <AlertTriangle size={26} />
+              </div>
 
-            <h3>Envoyer cette réponse ?</h3>
-            <p>
-              L’email sera envoyé à <strong>{selectedRequest.email}</strong> et
-              la demande passera automatiquement en statut répondu.
-            </p>
+              <h3>Envoyer cette réponse ?</h3>
+              <p>
+                L’email sera envoyé à <strong>{selectedRequest.email}</strong> et
+                la demande passera automatiquement en statut répondu.
+              </p>
+            </div>
 
             <div className="price-request-confirm-actions admin-modal-actions">
               <button

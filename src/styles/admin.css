@@ -142,9 +142,9 @@ body {
   --am-orange: #d8782f;
   --am-burgundy: #4b3035;
   --am-border: rgba(231, 230, 194, 0.22);
-  --admin-modal-z: 1300;
-  --admin-modal-width: min(1120px, calc(100vw - 64px));
-  --admin-modal-max-height: calc(100vh - 64px);
+  --admin-modal-z: 9999;
+  --admin-modal-width: min(960px, 100%);
+  --admin-modal-max-height: calc(100dvh - 48px);
   --admin-modal-radius: 32px;
   --admin-modal-padding: 28px;
   --admin-modal-padding-mobile: 18px;
@@ -163,7 +163,7 @@ body.admin-modal-open {
   inset: 0;
   z-index: var(--admin-modal-z);
   padding: 24px;
-  background: rgba(17, 17, 17, 0.58);
+  background: rgba(15, 12, 10, 0.55);
   backdrop-filter: blur(14px);
   display: flex;
   align-items: center;
@@ -171,6 +171,7 @@ body.admin-modal-open {
   overscroll-behavior: contain;
 }
 
+.admin-modal-card,
 .admin-modal-content {
   width: var(--admin-modal-width);
   max-width: 100%;
@@ -183,10 +184,16 @@ body.admin-modal-open {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  min-height: 0;
+}
+
+.admin-modal-card > *,
+.admin-modal-content > * {
+  min-height: 0;
 }
 
 .admin-modal-body {
-  flex: 1;
+  flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
@@ -217,19 +224,14 @@ body.admin-modal-open {
   border-radius: 999px;
 }
 
-.admin-modal-header,
-.admin-modal-actions {
-  position: sticky;
-  z-index: 2;
-  background: inherit;
-}
-
 .admin-modal-header {
-  top: 0;
+  flex: 0 0 auto;
+  min-height: 0;
 }
 
 .admin-modal-actions {
-  bottom: 0;
+  flex: 0 0 auto;
+  min-height: 0;
   margin-top: auto;
 }
 
@@ -245,30 +247,39 @@ body.admin-modal-open {
 
 @media (max-width: 768px) {
   :root {
-    --admin-modal-width: calc(100vw - 24px);
-    --admin-modal-max-height: 88vh;
+    --admin-modal-width: 100%;
+    --admin-modal-max-height: calc(100dvh - 20px);
     --admin-modal-radius: 24px;
   }
 
   .admin-modal,
   .admin-modal-backdrop,
   .admin-modal-overlay {
-    padding: 12px;
+    padding: 10px;
     align-items: flex-end;
   }
 
+  .admin-modal-card,
   .admin-modal-content {
     width: var(--admin-modal-width);
     max-height: var(--admin-modal-max-height);
-    border-radius: 24px 24px 18px 18px;
+    border-radius: 22px 22px 0 0;
   }
 
   .admin-modal-body {
-    overflow-y: auto;
+    max-height: none;
+    overflow-y: auto !important;
+    padding-bottom: 18px;
   }
 
   .admin-modal-actions {
-    padding-top: 14px;
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    background: #fffaf2;
+    padding: 12px;
+    display: grid;
+    gap: 10px;
   }
 
   .admin-modal-actions button,
@@ -281,6 +292,12 @@ body.admin-modal-open {
   .admin-modal-grid-2,
   .admin-modal-grid-3,
   .admin-modal-grid-4 {
+    grid-template-columns: 1fr !important;
+  }
+
+  .admin-modal-body form,
+  .admin-modal-body .form-grid,
+  .admin-modal-body .details-grid {
     grid-template-columns: 1fr !important;
   }
 } 

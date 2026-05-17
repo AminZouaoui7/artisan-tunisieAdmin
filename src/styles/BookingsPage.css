@@ -347,7 +347,7 @@
 .booking-profile-modal {
   position: relative;
   width: min(1180px, calc(100vw - 68px));
-  max-height: calc(100vh - 68px);
+  max-height: calc(100dvh - 68px);
   overflow: hidden;
   border-radius: 34px;
   background: #fff;
@@ -494,6 +494,7 @@
   grid-template-columns: 0.9fr 1.1fr;
   gap: 18px;
   flex: 1;
+  min-height: 0;
   align-items: start;
 }
 
@@ -721,7 +722,7 @@
     width: calc(100vw - 24px) !important;
     height: auto !important;
     max-height: 88vh !important;
-    overflow-y: auto !important;
+    overflow: hidden !important;
     border-radius: 24px !important;
   }
 
@@ -785,7 +786,7 @@
 .booking-confirm-modal {
   width: min(520px, calc(100vw - 40px));
   max-height: min(520px, var(--admin-modal-max-height));
-  overflow-y: auto;
+  overflow: hidden;
   padding: 30px;
   border-radius: 28px;
   background:
@@ -793,6 +794,9 @@
     #ffffff;
   box-shadow: 0 34px 90px rgba(12, 14, 25, 0.35);
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .booking-confirm-icon {
@@ -839,6 +843,12 @@
   justify-content: center;
   gap: 12px;
   flex-wrap: wrap;
+}
+
+.booking-confirm-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .booking-confirm-actions button {

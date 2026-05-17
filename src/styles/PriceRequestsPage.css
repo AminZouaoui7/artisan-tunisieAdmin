@@ -288,7 +288,7 @@
 .price-request-profile-modal {
   position: relative;
   width: min(1220px, calc(100vw - 68px));
-  max-height: calc(100vh - 68px);
+  max-height: calc(100dvh - 68px);
   overflow: hidden;
   border-radius: 34px;
   background: #fff;
@@ -435,6 +435,7 @@
   grid-template-columns: 0.85fr 1.15fr;
   gap: 18px;
   flex: 1;
+  min-height: 0;
   align-items: start;
 }
 
@@ -551,8 +552,8 @@
   margin-top: 16px;
   display: grid;
   gap: 12px;
-  max-height: 390px;
-  overflow-y: auto;
+  max-height: none;
+  overflow: visible;
   padding-right: 4px;
 }
 
@@ -633,7 +634,7 @@
 .price-request-confirm-modal {
   width: min(520px, calc(100vw - 40px));
   max-height: min(520px, var(--admin-modal-max-height));
-  overflow-y: auto;
+  overflow: hidden;
   padding: 30px;
   border-radius: 28px;
   background:
@@ -674,6 +675,12 @@
   justify-content: center;
   gap: 12px;
   flex-wrap: wrap;
+}
+
+.price-request-confirm-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .price-request-confirm-actions button {
@@ -786,7 +793,7 @@
     width: calc(100vw - 24px) !important;
     height: auto !important;
     max-height: 88vh !important;
-    overflow-y: auto !important;
+    overflow: hidden !important;
     border-radius: 24px !important;
   }
 
@@ -834,7 +841,7 @@
 
 .price-request-profile-modal {
   width: min(1180px, calc(100vw - 56px));
-  max-height: calc(100vh - 56px);
+  max-height: calc(100dvh - 56px);
   border-radius: 34px;
 }
 
@@ -877,8 +884,7 @@
 
 .price-request-summary-panel {
   grid-row: span 2;
-  position: sticky;
-  top: 0;
+  position: static;
 }
 
 .price-request-reply-panel {
@@ -915,10 +921,6 @@
 
 .price-request-send-btn {
   margin-top: 14px;
-}
-
-.price-request-messages-list {
-  max-height: 300px;
 }
 
 .price-request-message {
@@ -1020,8 +1022,7 @@
 }
 
 .price-request-body-redesign .premium-summary-panel {
-  position: sticky;
-  top: 0;
+  position: static;
   height: fit-content;
 }
 
@@ -1074,7 +1075,7 @@
 .price-request-history-modal {
   position: relative;
   width: min(720px, calc(100vw - 40px));
-  max-height: calc(100vh - 70px);
+  max-height: calc(100dvh - 70px);
   overflow: hidden;
   border-radius: 30px;
   background: #fff;
@@ -1132,8 +1133,7 @@
 
 .history-modal-list {
   padding: 24px 28px 28px 48px;
-  overflow-y: auto;
-  max-height: 560px;
+  min-height: 0;
 }
 
 @media (max-width: 1180px) {
@@ -1149,7 +1149,7 @@
 @media (max-width: 760px) {
   .price-request-modal-redesign {
     width: 100%;
-    max-height: none;
+    max-height: calc(100dvh - 20px);
   }
 
   .price-request-body-redesign {

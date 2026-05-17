@@ -1138,97 +1138,98 @@ const buildPayload = () => ({
               <button className="view-close" type="button" onClick={() => setViewProduct(null)}>
                 <X size={20} />
               </button>
+              <div className="detail-body admin-modal-body admin-modal-scrollbar">
+                <div className="detail-gallery">
+                  <div className="detail-main-image">
+                    {viewProduct.mainImageUrl ? (
+                      <img src={getImageUrl(viewProduct.mainImageUrl)} alt={viewProduct.name} />
+                    ) : (
+                      <Package size={46} />
+                    )}
+                  </div>
 
-              <div className="detail-gallery">
-                <div className="detail-main-image">
-                  {viewProduct.mainImageUrl ? (
-                    <img src={getImageUrl(viewProduct.mainImageUrl)} alt={viewProduct.name} />
-                  ) : (
-                    <Package size={46} />
+                  {viewProduct.images.length > 1 && (
+                    <div className="detail-thumbs">
+                      {viewProduct.images.slice(0, 5).map((img) => (
+                        <img key={img.id} src={getImageUrl(img.imageUrl)} alt="" />
+                      ))}
+                    </div>
                   )}
                 </div>
 
-                {viewProduct.images.length > 1 && (
-                  <div className="detail-thumbs">
-                    {viewProduct.images.slice(0, 5).map((img) => (
-                      <img key={img.id} src={getImageUrl(img.imageUrl)} alt="" />
-                    ))}
+                <div className="detail-content">
+                  <div className="detail-title-row">
+                    <div>
+                      <span className={`product-status detail-status status-${viewProduct.status.toLowerCase()}`}>
+                        {statusLabels[viewProduct.status]}
+                      </span>
+                      <h2>{viewProduct.name}</h2>
+                      <p>{viewProduct.shortStory || viewProduct.description || "Aucune description disponible."}</p>
+                    </div>
+
+                    <div className="detail-price-box">
+                      <span>Prix</span>
+                      <strong>{viewProduct.price} €</strong>
+                      {viewProduct.isPriceOnRequestOnlyInTunisia && (
+                        <em>Sur demande pour la Tunisie</em>
+                      )}
+                    </div>
                   </div>
-                )}
-              </div>
 
-              <div className="detail-content">
-                <div className="detail-title-row">
-                  <div>
-                    <span className={`product-status detail-status status-${viewProduct.status.toLowerCase()}`}>
-                      {statusLabels[viewProduct.status]}
-                    </span>
-                    <h2>{viewProduct.name}</h2>
-                    <p>{viewProduct.shortStory || viewProduct.description || "Aucune description disponible."}</p>
+                  <div className="detail-badges">
+                    {viewProduct.isActive && <span>Actif</span>}
+                    {viewProduct.isFeatured && <span>Vedette</span>}
+                    {viewProduct.isHandmade && <span>Fait main</span>}
+                    {viewProduct.isUniquePiece && <span>Pièce unique</span>}
+                    {viewProduct.isPriceOnRequestOnlyInTunisia && <span>Prix Tunisie sur demande</span>}
                   </div>
 
-                  <div className="detail-price-box">
-                    <span>Prix</span>
-                    <strong>{viewProduct.price} €</strong>
-                    {viewProduct.isPriceOnRequestOnlyInTunisia && (
-                      <em>Sur demande pour la Tunisie</em>
-                    )}
+                  <div className="detail-info-grid">
+                    <Info label="Catégorie" value={viewProduct.category} />
+                    <Info label="Type" value={viewProduct.type} />
+                    <Info label="Région" value={viewProduct.region} />
+                    <Info label="Matière" value={viewProduct.material} />
+                    <Info label="Couleurs" value={viewProduct.colors} />
+                    <Info label="Technique" value={viewProduct.technique} />
+                    <Info label="Dimensions" value={viewProduct.dimensions || `${viewProduct.lengthCm || "-"} x ${viewProduct.widthCm || "-"} cm`} />
+                    <Info label="Poids" value={viewProduct.weightKg ? `${viewProduct.weightKg} kg` : undefined} />
+                    <Info label="Âge" value={viewProduct.ageYears ? `${viewProduct.ageYears} ans` : undefined} />
+                    <Info label="État" value={viewProduct.condition} />
+                    <Info label="Densité" value={viewProduct.density} />
+                    <Info label="Forme" value={viewProduct.shape} />
+                    <Info label="Style" value={viewProduct.style} />
+                    <Info label="Espace conseillé" value={viewProduct.usageSpace} />
+                    <Info label="Stock" value={String(viewProduct.stock)} />
+                    <Info label="Créé le" value={formatDate(viewProduct.createdAt)} />
                   </div>
-                </div>
 
-                <div className="detail-badges">
-                  {viewProduct.isActive && <span>Actif</span>}
-                  {viewProduct.isFeatured && <span>Vedette</span>}
-                  {viewProduct.isHandmade && <span>Fait main</span>}
-                  {viewProduct.isUniquePiece && <span>Pièce unique</span>}
-                  {viewProduct.isPriceOnRequestOnlyInTunisia && <span>Prix Tunisie sur demande</span>}
-                </div>
+                  {(viewProduct.description || viewProduct.careInstructions) && (
+                    <div className="detail-text-blocks">
+                      {viewProduct.description && (
+                        <div>
+                          <h3>Description</h3>
+                          <p>{viewProduct.description}</p>
+                        </div>
+                      )}
 
-                <div className="detail-info-grid">
-                  <Info label="Catégorie" value={viewProduct.category} />
-                  <Info label="Type" value={viewProduct.type} />
-                  <Info label="Région" value={viewProduct.region} />
-                  <Info label="Matière" value={viewProduct.material} />
-                  <Info label="Couleurs" value={viewProduct.colors} />
-                  <Info label="Technique" value={viewProduct.technique} />
-                  <Info label="Dimensions" value={viewProduct.dimensions || `${viewProduct.lengthCm || "-"} x ${viewProduct.widthCm || "-"} cm`} />
-                  <Info label="Poids" value={viewProduct.weightKg ? `${viewProduct.weightKg} kg` : undefined} />
-                  <Info label="Âge" value={viewProduct.ageYears ? `${viewProduct.ageYears} ans` : undefined} />
-                  <Info label="État" value={viewProduct.condition} />
-                  <Info label="Densité" value={viewProduct.density} />
-                  <Info label="Forme" value={viewProduct.shape} />
-                  <Info label="Style" value={viewProduct.style} />
-                  <Info label="Espace conseillé" value={viewProduct.usageSpace} />
-                  <Info label="Stock" value={String(viewProduct.stock)} />
-                  <Info label="Créé le" value={formatDate(viewProduct.createdAt)} />
-                </div>
+                      {viewProduct.careInstructions && (
+                        <div>
+                          <h3>Entretien</h3>
+                          <p>{viewProduct.careInstructions}</p>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
-                {(viewProduct.description || viewProduct.careInstructions) && (
-                  <div className="detail-text-blocks">
-                    {viewProduct.description && (
-                      <div>
-                        <h3>Description</h3>
-                        <p>{viewProduct.description}</p>
-                      </div>
-                    )}
-
-                    {viewProduct.careInstructions && (
-                      <div>
-                        <h3>Entretien</h3>
-                        <p>{viewProduct.careInstructions}</p>
-                      </div>
-                    )}
+                  <div className="detail-actions">
+                    <button type="button" onClick={() => {
+                      setViewProduct(null);
+                      openEditModal(viewProduct);
+                    }}>
+                      <Pencil size={17} />
+                      Modifier ce produit
+                    </button>
                   </div>
-                )}
-
-                <div className="detail-actions">
-                  <button type="button" onClick={() => {
-                    setViewProduct(null);
-                    openEditModal(viewProduct);
-                  }}>
-                    <Pencil size={17} />
-                    Modifier ce produit
-                  </button>
                 </div>
               </div>
             </motion.div>
@@ -1391,8 +1392,10 @@ const buildPayload = () => ({
               transition={{ duration: 0.2 }}
               onClick={(event) => event.stopPropagation()}
             >
-              <h3>{confirmModal.title}</h3>
-              <p>{confirmModal.description}</p>
+              <div className="product-confirm-body admin-modal-body">
+                <h3>{confirmModal.title}</h3>
+                <p>{confirmModal.description}</p>
+              </div>
               <div className="product-confirm-actions admin-modal-actions">
                 <button type="button" onClick={() => setConfirmModal(null)} disabled={confirmLoading}>
                   Annuler
@@ -1430,17 +1433,19 @@ const buildPayload = () => ({
               transition={{ duration: 0.2 }}
               onClick={(event) => event.stopPropagation()}
             >
-              <div className="product-error-modal-head">
-                <AlertCircle size={20} />
-                <h3>Erreur API</h3>
+              <div className="product-error-modal-body admin-modal-body">
+                <div className="product-error-modal-head">
+                  <AlertCircle size={20} />
+                  <h3>Erreur API</h3>
+                </div>
+                <p>{errorModal.message}</p>
+                {typeof errorModal.status === "number" && (
+                  <small>HTTP {errorModal.status}</small>
+                )}
+                {errorModal.details && (
+                  <pre>{errorModal.details}</pre>
+                )}
               </div>
-              <p>{errorModal.message}</p>
-              {typeof errorModal.status === "number" && (
-                <small>HTTP {errorModal.status}</small>
-              )}
-              {errorModal.details && (
-                <pre>{errorModal.details}</pre>
-              )}
               <button type="button" onClick={() => setErrorModal(null)}>
                 Fermer
               </button>
