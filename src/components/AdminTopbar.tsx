@@ -148,8 +148,10 @@ export default function AdminTopbar({
                         <Icon size={17} />
                       </span>
 
-                      <span className="admin-notification-label">
-                        {item.label}
+                      <span className="admin-notification-content">
+                        <span className="admin-notification-label">
+                          {item.label}
+                        </span>
                       </span>
 
                       <span

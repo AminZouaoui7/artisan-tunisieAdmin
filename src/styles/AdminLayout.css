@@ -724,6 +724,11 @@ body,
   font-weight: 850;
 }
 
+.admin-notification-content {
+  min-width: 0;
+  display: block;
+}
+
 .admin-notification-count {
   min-width: 27px;
   height: 27px;
@@ -893,17 +898,18 @@ body,
   .notifications-dropdown,
   .notification-menu {
     position: fixed !important;
-    top: 86px !important;
-    left: 12px !important;
-    right: 12px !important;
+    top: 96px !important;
+    left: 16px !important;
+    right: 16px !important;
     width: auto !important;
     max-width: none !important;
-    max-height: calc(100dvh - 110px) !important;
+    max-height: calc(100dvh - 130px) !important;
     overflow-y: auto !important;
+    overflow-x: hidden !important;
     border-radius: 24px !important;
     z-index: 99999 !important;
     transform: none !important;
-    right: 12px !important;
+    padding: 22px !important;
   }
 
   .admin-notifications-dropdown::before {
@@ -917,38 +923,68 @@ body,
   .notification-item,
   .admin-notification-item,
   .admin-notification-row {
-    display: grid !important;
-    grid-template-columns: 48px minmax(0, 1fr) auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: row !important;
     gap: 12px !important;
     align-items: center !important;
-    padding: 14px !important;
+    padding: 14px 0 !important;
   }
 
-  .admin-notification-icon {
+  .notification-item-icon,
+  .admin-notification-icon,
+  .notification-icon {
+    flex: 0 0 48px !important;
     width: 48px !important;
     height: 48px !important;
     border-radius: 18px !important;
   }
 
+  .notification-item-content,
+  .admin-notification-content,
+  .notification-content {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: auto !important;
+    display: block !important;
+  }
+
+  .notification-item-title,
+  .admin-notification-title,
+  .notification-title,
+  .admin-notification-label {
+    display: block !important;
+    width: 100% !important;
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+    line-height: 1.25 !important;
+  }
+
   .notification-item *,
   .admin-notification-item *,
-  .admin-notification-row *,
-  .admin-notifications-dropdown *,
-  .admin-notification-label {
+  .notification-row *,
+  .admin-notification-row * {
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
     white-space: normal !important;
+    text-align: left !important;
     overflow: visible !important;
     text-overflow: unset !important;
-    word-break: break-word !important;
   }
 
-  .admin-notification-label {
-    min-width: 0 !important;
-    line-height: 1.4 !important;
-    font-size: 14px !important;
-  }
-
-  .admin-notification-count {
-    align-self: start !important;
+  .notification-count,
+  .admin-notification-count,
+  .notification-badge {
+    flex: 0 0 auto !important;
+    min-width: 28px !important;
+    height: 28px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   .admin-notification-row:hover {
