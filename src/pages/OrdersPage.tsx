@@ -19,6 +19,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { adminFetch } from "../services/adminApi";
+import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 import "../styles/OrdersPage.css";
 
 type OrderStatus = "Pending" | "Confirmed" | "Shipped" | "Delivered" | "Cancelled";
@@ -101,8 +102,10 @@ export default function OrdersPage() {
   const [shippingModalOrder, setShippingModalOrder] = useState<AdminOrder | null>(null);
   const [shippingProvider, setShippingProvider] = useState("");
   const [trackingNumber, setTrackingNumber] = useState("");
-
   const [confirmAction, setConfirmAction] = useState<ConfirmAction | null>(null);
+
+
+  useBodyScrollLock(Boolean(shippingModalOrder || confirmAction));
 
   const pushToast = useCallback((kind: ToastKind, message: string) => {
     const id = Date.now();
@@ -550,8 +553,8 @@ export default function OrdersPage() {
       </section>
 
       {shippingModalOrder && (
-        <div className="orders-modal-backdrop">
-          <div className="orders-modal">
+        <div className="orders-modal-backdrop admin-modal">
+          <div className="orders-modal admin-modal-content">
             <button className="orders-modal-close" onClick={() => setShippingModalOrder(null)}>
               ×
             </button>
@@ -584,7 +587,7 @@ export default function OrdersPage() {
               />
             </label>
 
-            <div className="orders-modal-actions">
+            <div className="orders-modal-actions admin-modal-actions">
               <button className="orders-secondary-btn" onClick={() => setShippingModalOrder(null)}>
                 Annuler
               </button>
@@ -607,8 +610,12 @@ export default function OrdersPage() {
       )}
 
       {confirmAction && (
-        <div className="orders-modal-backdrop">
-          <div className={`orders-confirm-modal ${confirmAction.danger ? "danger" : ""}`}>
+        <div className="orders-modal-backdrop admin-modal">
+          <div
+            className={`orders-confirm-modal admin-modal-content ${
+              confirmAction.danger ? "danger" : ""
+            }`}
+          >
             <button className="orders-modal-close" onClick={() => setConfirmAction(null)}>
               <X size={18} />
             </button>
@@ -638,7 +645,7 @@ export default function OrdersPage() {
               </strong>
             </div>
 
-            <div className="orders-modal-actions">
+            <div className="orders-modal-actions admin-modal-actions">
               <button className="orders-secondary-btn" onClick={() => setConfirmAction(null)}>
                 Retour
               </button>

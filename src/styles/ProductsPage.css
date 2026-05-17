@@ -399,16 +399,7 @@
 /* MODAL BASE */
 
 .product-modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 999;
-  padding: 32px;
-  background: rgba(20, 22, 35, 0.5);
-  backdrop-filter: blur(12px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  z-index: var(--admin-modal-z);
 }
 
 /* DETAIL MODAL FIX */
@@ -661,6 +652,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .product-modal-header span {
@@ -690,6 +682,8 @@
 
 .product-modal-content {
   padding: 26px 28px;
+  flex: 1;
+  min-height: 0;
   overflow: auto;
 }
 
@@ -874,6 +868,7 @@
   display: flex;
   justify-content: flex-end;
   gap: 12px;
+  flex-shrink: 0;
 }
 
 .product-modal-footer button {
@@ -948,11 +943,6 @@
 }
 
 @media (max-width: 760px) {
-  .product-modal-overlay {
-    padding: 10px !important;
-    align-items: flex-end !important;
-  }
-
   .products-hero {
     flex-direction: column !important;
     align-items: flex-start !important;
@@ -992,11 +982,11 @@
 
   .product-detail-modal,
   .product-modal {
-    width: 100% !important;
+    width: calc(100vw - 24px) !important;
     height: auto !important;
-    max-height: 92vh !important;
+    max-height: 88vh !important;
     overflow-y: auto !important;
-    border-radius: 24px 24px 0 0 !important;
+    border-radius: 24px !important;
   }
 
   .detail-gallery {
@@ -1007,6 +997,15 @@
   .detail-main-image {
     min-height: 240px !important;
     border-radius: 18px !important;
+  }
+
+  .detail-main-image img,
+  .detail-thumbs img,
+  .existing-image img {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
   }
 
   .detail-content {
@@ -1028,6 +1027,16 @@
     gap: 12px !important;
   }
 
+  .product-modal-header {
+    padding: 18px !important;
+    gap: 12px !important;
+    align-items: flex-start !important;
+  }
+
+  .product-modal-content {
+    padding: 18px !important;
+  }
+
   .existing-images-grid {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 8px !important;
@@ -1040,6 +1049,25 @@
 
   .product-modal-footer button {
     width: 100% !important;
+  }
+
+  .product-confirm-modal,
+  .product-error-modal {
+    width: calc(100vw - 24px) !important;
+    max-height: 88vh !important;
+    border-radius: 24px !important;
+    overflow-y: auto !important;
+    padding: 20px !important;
+  }
+
+  .product-confirm-actions {
+    flex-direction: column !important;
+  }
+
+  .product-confirm-actions button,
+  .product-error-modal button {
+    width: 100% !important;
+    justify-content: center !important;
   }
 }
 
@@ -1118,6 +1146,7 @@
 
 .product-confirm-modal {
   width: min(520px, calc(100vw - 40px));
+  max-height: min(520px, var(--admin-modal-max-height));
   border-radius: 24px;
   background:
     radial-gradient(circle at top right, rgba(147, 51, 234, 0.14), transparent 38%),
@@ -1146,6 +1175,7 @@
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .product-confirm-actions button {
@@ -1169,6 +1199,8 @@
 
 .product-error-modal {
   width: min(620px, calc(100vw - 40px));
+  max-height: min(620px, var(--admin-modal-max-height));
+  overflow-y: auto;
   border-radius: 24px;
   padding: 26px;
   color: #ffe8e8;

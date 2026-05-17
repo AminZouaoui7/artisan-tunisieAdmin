@@ -24,6 +24,7 @@ import {
   type AdminCustomerDetails,
   type AdminCustomerListItem,
 } from "../services/adminCustomerService";
+import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 
 import "../styles/CustomersPage.css";
 
@@ -57,6 +58,8 @@ export default function CustomersPage() {
   const [loading, setLoading] = useState(true);
   const [detailsLoading, setDetailsLoading] = useState(false);
   const [toggleLoading, setToggleLoading] = useState(false);
+
+  useBodyScrollLock(Boolean(selectedCustomer || detailsLoading));
 
   const [error, setError] = useState("");
   const [toast, setToast] = useState("");
@@ -317,8 +320,8 @@ export default function CustomersPage() {
         </section>
       )}
       {(selectedCustomer || detailsLoading) && (
-  <div className="customer-profile-overlay">
-    <section className="customer-profile-modal">
+  <div className="customer-profile-overlay admin-modal">
+    <section className="customer-profile-modal admin-modal-content">
       {detailsLoading ? (
         <div className="customer-profile-loading">
           <Loader2 className="spin" size={34} />
@@ -401,7 +404,7 @@ export default function CustomersPage() {
             </div>
           </div>
 
-          <div className="customer-profile-body">
+          <div className="customer-profile-body admin-modal-body admin-modal-scrollbar">
             <section className="customer-profile-panel customer-profile-summary">
               <div className="customer-panel-title">
                 <ShieldCheck size={18} />

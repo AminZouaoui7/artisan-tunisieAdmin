@@ -406,14 +406,7 @@
 }
 
 .orders-modal-backdrop {
-  position: fixed;
-  inset: 0;
   z-index: 70;
-  background: rgba(24, 26, 39, 0.42);
-  backdrop-filter: blur(10px);
-  display: grid;
-  place-items: center;
-  padding: 20px;
 }
 
 .orders-modal {
@@ -424,6 +417,7 @@
   background: #fffaf6;
   border: 1px solid rgba(180, 86, 49, 0.14);
   box-shadow: 0 30px 100px rgba(0, 0, 0, 0.22);
+  overflow-y: auto;
 }
 
 .orders-modal-close {
@@ -488,6 +482,7 @@
   justify-content: flex-end;
   gap: 12px;
   margin-top: 22px;
+  flex-wrap: wrap;
 }
 
 .orders-details-total {
@@ -685,18 +680,13 @@
     width: 100% !important;
   }
 
-  .orders-modal-backdrop {
-    padding: 10px !important;
-    align-items: flex-end !important;
-  }
-
   .orders-modal,
   .orders-confirm-modal {
-    width: 100% !important;
-    max-height: 92vh !important;
+    width: calc(100vw - 24px) !important;
+    max-height: 88vh !important;
     overflow-y: auto !important;
-    border-radius: 24px 24px 0 0 !important;
-    padding: 22px !important;
+    border-radius: 24px !important;
+    padding: 20px !important;
   }
 
   .orders-modal-actions {
@@ -728,6 +718,7 @@
   background: #fffaf6;
   border: 1px solid rgba(180, 86, 49, 0.14);
   box-shadow: 0 30px 100px rgba(0, 0, 0, 0.22);
+  overflow-y: auto;
 }
 
 .orders-confirm-icon {

@@ -30,6 +30,7 @@ import {
   buildBackendUrl,
   getAdminToken,
 } from "../services/adminApi";
+import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 import "../styles/ProductsPage.css";
 
 type ProductStatus = "Available" | "Reserved" | "Sold" | "Hidden";
@@ -298,6 +299,8 @@ export default function AdminProductsPage() {
   const [confirmModal, setConfirmModal] = useState<ConfirmModalState | null>(null);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [uploadingImages, setUploadingImages] = useState(false);
+
+  useBodyScrollLock(Boolean(viewProduct || isModalOpen || confirmModal || errorModal));
 
   const toastTimersRef = useRef<Record<number, ReturnType<typeof setTimeout>>>({});
   const didInitDebouncedSearchRef = useRef(false);
@@ -1120,13 +1123,13 @@ const buildPayload = () => ({
       <AnimatePresence>
         {viewProduct && (
           <motion.div
-            className="product-modal-overlay"
+            className="product-modal-overlay admin-modal"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="product-detail-modal"
+              className="product-detail-modal admin-modal-content"
               initial={{ opacity: 0, y: 28, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.97 }}
@@ -1236,20 +1239,20 @@ const buildPayload = () => ({
       <AnimatePresence>
         {isModalOpen && (
           <motion.div
-            className="product-modal-overlay"
+            className="product-modal-overlay admin-modal"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             <motion.form
-              className="product-modal"
+              className="product-modal admin-modal-content"
               onSubmit={saveProduct}
               initial={{ opacity: 0, y: 28, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.97 }}
               transition={{ type: "spring", stiffness: 260, damping: 28 }}
             >
-            <div className="product-modal-header">
+            <div className="product-modal-header admin-modal-header">
               <div>
                 <span>{editingProduct ? "Modification produit" : "Nouveau produit"}</span>
                 <h2>{editingProduct ? "Modifier la fiche produit" : "Ajouter un tapis"}</h2>
@@ -1260,7 +1263,7 @@ const buildPayload = () => ({
               </button>
             </div>
 
-            <div className="product-modal-content">
+            <div className="product-modal-content admin-modal-body admin-modal-scrollbar">
               <div className="product-form-grid">
                 <label>Nom du produit *<input value={form.name} onChange={(e) => updateForm("name", e.target.value)} /></label>
                 <label>Slug *<input value={form.slug} onChange={(e) => updateForm("slug", e.target.value)} /></label>
@@ -1356,7 +1359,7 @@ const buildPayload = () => ({
               )}
             </div>
 
-            <div className="product-modal-footer">
+            <div className="product-modal-footer admin-modal-actions">
               <button type="button" onClick={closeModal}>Annuler</button>
               <button type="submit" disabled={saving}>
                 {saving && <Loader2 className="spin" size={17} />}
@@ -1372,7 +1375,7 @@ const buildPayload = () => ({
       <AnimatePresence>
         {confirmModal && (
           <motion.div
-            className="product-modal-overlay"
+            className="product-modal-overlay admin-modal"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -1381,7 +1384,7 @@ const buildPayload = () => ({
             }}
           >
             <motion.div
-              className="product-confirm-modal"
+              className="product-confirm-modal admin-modal-content"
               initial={{ opacity: 0, y: 16, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 12, scale: 0.96 }}
@@ -1390,7 +1393,7 @@ const buildPayload = () => ({
             >
               <h3>{confirmModal.title}</h3>
               <p>{confirmModal.description}</p>
-              <div className="product-confirm-actions">
+              <div className="product-confirm-actions admin-modal-actions">
                 <button type="button" onClick={() => setConfirmModal(null)} disabled={confirmLoading}>
                   Annuler
                 </button>
@@ -1413,14 +1416,14 @@ const buildPayload = () => ({
       <AnimatePresence>
         {errorModal && (
           <motion.div
-            className="product-modal-overlay"
+            className="product-modal-overlay admin-modal"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setErrorModal(null)}
           >
             <motion.div
-              className="product-error-modal"
+              className="product-error-modal admin-modal-content"
               initial={{ opacity: 0, y: 16, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 12, scale: 0.96 }}

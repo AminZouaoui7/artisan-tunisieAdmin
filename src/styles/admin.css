@@ -142,6 +142,147 @@ body {
   --am-orange: #d8782f;
   --am-burgundy: #4b3035;
   --am-border: rgba(231, 230, 194, 0.22);
+  --admin-modal-z: 1300;
+  --admin-modal-width: min(1120px, calc(100vw - 64px));
+  --admin-modal-max-height: calc(100vh - 64px);
+  --admin-modal-radius: 32px;
+  --admin-modal-padding: 28px;
+  --admin-modal-padding-mobile: 18px;
+  --admin-modal-scrollbar: rgba(47, 99, 113, 0.28);
+  --admin-modal-scrollbar-track: rgba(231, 230, 194, 0.42);
+}
+
+body.admin-modal-open {
+  overflow: hidden !important;
+}
+
+.admin-modal,
+.admin-modal-backdrop,
+.admin-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--admin-modal-z);
+  padding: 24px;
+  background: rgba(17, 17, 17, 0.58);
+  backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overscroll-behavior: contain;
+}
+
+.admin-modal-content {
+  width: var(--admin-modal-width);
+  max-width: 100%;
+  max-height: var(--admin-modal-max-height);
+  overflow: hidden;
+  border-radius: var(--admin-modal-radius);
+  background: #fffdf7;
+  border: 1px solid rgba(47, 99, 113, 0.14);
+  box-shadow: 0 20px 48px rgba(31, 28, 24, 0.12);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.admin-modal-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--admin-modal-scrollbar) transparent;
+}
+
+.admin-modal-body::-webkit-scrollbar,
+.admin-modal-content::-webkit-scrollbar,
+.admin-modal-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.admin-modal-body::-webkit-scrollbar-track,
+.admin-modal-content::-webkit-scrollbar-track,
+.admin-modal-scrollbar::-webkit-scrollbar-track {
+  background: var(--admin-modal-scrollbar-track);
+  border-radius: 999px;
+}
+
+.admin-modal-body::-webkit-scrollbar-thumb,
+.admin-modal-content::-webkit-scrollbar-thumb,
+.admin-modal-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--admin-modal-scrollbar);
+  border-radius: 999px;
+}
+
+.admin-modal-header,
+.admin-modal-actions {
+  position: sticky;
+  z-index: 2;
+  background: inherit;
+}
+
+.admin-modal-header {
+  top: 0;
+}
+
+.admin-modal-actions {
+  bottom: 0;
+  margin-top: auto;
+}
+
+.admin-modal-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-modal img {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --admin-modal-width: calc(100vw - 24px);
+    --admin-modal-max-height: 88vh;
+    --admin-modal-radius: 24px;
+  }
+
+  .admin-modal,
+  .admin-modal-backdrop,
+  .admin-modal-overlay {
+    padding: 12px;
+    align-items: flex-end;
+  }
+
+  .admin-modal-content {
+    width: var(--admin-modal-width);
+    max-height: var(--admin-modal-max-height);
+    border-radius: 24px 24px 18px 18px;
+  }
+
+  .admin-modal-body {
+    overflow-y: auto;
+  }
+
+  .admin-modal-actions {
+    padding-top: 14px;
+  }
+
+  .admin-modal-actions button,
+  .admin-modal button.admin-modal-full,
+  .admin-modal-content button.admin-modal-full {
+    width: 100%;
+  }
+
+  .admin-modal-grid,
+  .admin-modal-grid-2,
+  .admin-modal-grid-3,
+  .admin-modal-grid-4 {
+    grid-template-columns: 1fr !important;
+  }
 } 
 
 @media (max-width: 760px) {
@@ -248,36 +389,13 @@ body {
     min-height: 40px !important;
   }
 
-  /* MODALS RESPONSIVE */
-  .admin-modal,
-  .product-modal,
-  .order-modal,
-  .customer-modal,
-  .booking-modal,
-  .price-request-modal {
-    padding: 10px !important;
-    align-items: flex-end !important;
+  .admin-modal-actions {
+    flex-direction: column !important;
+    gap: 10px !important;
   }
 
-  .admin-modal-card,
-  .product-modal-card,
-  .order-modal-card,
-  .customer-modal-card,
-  .booking-modal-card,
-  .price-request-modal-card {
+  .admin-modal-actions button {
     width: 100% !important;
-    max-height: 92vh !important;
-    overflow-y: auto !important;
-
-    border-radius: 24px 24px 0 0 !important;
-    padding: 18px !important;
-  }
-
-  .admin-modal-grid,
-  .product-modal-grid,
-  .order-modal-grid,
-  .customer-modal-grid,
-  .booking-modal-grid {
-    grid-template-columns: 1fr !important;
+    justify-content: center !important;
   }
 }

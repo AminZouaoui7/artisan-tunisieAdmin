@@ -614,16 +614,15 @@
   }
 
   .customer-profile-overlay {
-    padding: 10px !important;
     align-items: flex-end !important;
   }
 
   .customer-profile-modal {
-    width: 100% !important;
+    width: calc(100vw - 24px) !important;
     height: auto !important;
-    max-height: 92vh !important;
+    max-height: 88vh !important;
     overflow-y: auto !important;
-    border-radius: 24px 24px 0 0 !important;
+    border-radius: 24px !important;
   }
 
   .customer-profile-hero {
@@ -676,15 +675,7 @@
 ========================= */
 
 .customer-profile-overlay {
-  position: fixed;
-  inset: 0;
   z-index: 999;
-  padding: 34px;
-  background: rgba(20, 22, 35, 0.54);
-  backdrop-filter: blur(14px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .customer-profile-modal {
@@ -822,7 +813,9 @@
   display: grid;
   grid-template-columns: 0.9fr 1.1fr 1.1fr;
   gap: 16px;
+  flex: 1;
 }
+
 
 .customer-profile-panel {
   min-height: 210px;
@@ -966,15 +959,9 @@
 }
 
 @media (max-width: 760px) {
-  .customer-profile-overlay {
-    padding: 14px;
-    align-items: flex-start;
-    overflow-y: auto;
-  }
-
   .customer-profile-modal {
-    width: 100%;
-    max-height: none;
+    width: calc(100vw - 24px);
+    max-height: 88vh;
   }
 
   .customer-profile-hero {

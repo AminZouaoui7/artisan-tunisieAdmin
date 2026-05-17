@@ -341,15 +341,7 @@
 /* MODAL */
 
 .booking-profile-overlay {
-  position: fixed;
-  inset: 0;
   z-index: 999;
-  padding: 34px;
-  background: rgba(20, 22, 35, 0.54);
-  backdrop-filter: blur(14px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .booking-profile-modal {
@@ -501,6 +493,7 @@
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
   gap: 18px;
+  flex: 1;
   align-items: start;
 }
 
@@ -724,17 +717,12 @@
     gap: 14px !important;
   }
 
-  .booking-profile-overlay {
-    padding: 10px !important;
-    align-items: flex-end !important;
-  }
-
   .booking-profile-modal {
-    width: 100% !important;
+    width: calc(100vw - 24px) !important;
     height: auto !important;
-    max-height: 92vh !important;
+    max-height: 88vh !important;
     overflow-y: auto !important;
-    border-radius: 24px 24px 0 0 !important;
+    border-radius: 24px !important;
   }
 
   .booking-profile-hero {
@@ -769,9 +757,11 @@
   }
 
   .booking-confirm-modal {
-    width: 100% !important;
-    border-radius: 24px 24px 0 0 !important;
-    padding: 24px !important;
+    width: calc(100vw - 24px) !important;
+    max-height: 88vh !important;
+    overflow-y: auto !important;
+    border-radius: 24px !important;
+    padding: 20px !important;
     align-self: flex-end !important;
   }
 }
@@ -794,6 +784,8 @@
 
 .booking-confirm-modal {
   width: min(520px, calc(100vw - 40px));
+  max-height: min(520px, var(--admin-modal-max-height));
+  overflow-y: auto;
   padding: 30px;
   border-radius: 28px;
   background:
@@ -846,6 +838,7 @@
   display: flex;
   justify-content: center;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
 .booking-confirm-actions button {

@@ -25,6 +25,7 @@ import {
   type AdminBooking,
   type BookingStatus,
 } from "../services/adminBookingService";
+import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 
 import "../styles/BookingsPage.css";
 
@@ -96,6 +97,8 @@ export default function BookingsPage() {
   const [confirmAction, setConfirmAction] = useState<ConfirmAction | null>(
     null
   );
+
+  useBodyScrollLock(Boolean(selectedBooking || detailsLoading || confirmAction));
   const [pendingStatus, setPendingStatus] = useState<BookingStatus | null>(
     null
   );
@@ -449,8 +452,8 @@ export default function BookingsPage() {
       )}
 
       {(selectedBooking || detailsLoading) && (
-        <div className="booking-profile-overlay">
-          <section className="booking-profile-modal">
+        <div className="booking-profile-overlay admin-modal">
+          <section className="booking-profile-modal admin-modal-content">
             {detailsLoading ? (
               <div className="booking-profile-loading">
                 <Loader2 className="spin" size={34} />
@@ -536,7 +539,7 @@ export default function BookingsPage() {
                   </div>
                 </div>
 
-                <div className="booking-profile-body">
+                <div className="booking-profile-body admin-modal-body admin-modal-scrollbar">
                   <section className="booking-profile-panel booking-summary-panel">
                     <div className="booking-panel-title">
                       <Clock size={18} />
@@ -658,8 +661,8 @@ export default function BookingsPage() {
       )}
 
       {confirmAction && (
-        <div className="booking-confirm-overlay">
-          <section className="booking-confirm-modal">
+        <div className="booking-confirm-overlay admin-modal">
+          <section className="booking-confirm-modal admin-modal-content">
             <div className={`booking-confirm-icon ${confirmAction.kind}`}>
               <AlertTriangle size={26} />
             </div>
@@ -667,7 +670,7 @@ export default function BookingsPage() {
             <h3>{confirmAction.title}</h3>
             <p>{confirmAction.message}</p>
 
-            <div className="booking-confirm-actions">
+            <div className="booking-confirm-actions admin-modal-actions">
               <button
                 type="button"
                 onClick={closeConfirmation}

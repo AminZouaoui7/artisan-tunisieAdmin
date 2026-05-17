@@ -282,15 +282,7 @@
 /* PROFILE MODAL */
 
 .price-request-profile-overlay {
-  position: fixed;
-  inset: 0;
   z-index: 999;
-  padding: 34px;
-  background: rgba(20, 22, 35, 0.54);
-  backdrop-filter: blur(14px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .price-request-profile-modal {
@@ -442,6 +434,7 @@
   display: grid;
   grid-template-columns: 0.85fr 1.15fr;
   gap: 18px;
+  flex: 1;
   align-items: start;
 }
 
@@ -639,6 +632,8 @@
 
 .price-request-confirm-modal {
   width: min(520px, calc(100vw - 40px));
+  max-height: min(520px, var(--admin-modal-max-height));
+  overflow-y: auto;
   padding: 30px;
   border-radius: 28px;
   background:
@@ -678,6 +673,7 @@
   display: flex;
   justify-content: center;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
 .price-request-confirm-actions button {
@@ -786,17 +782,12 @@
     gap: 14px !important;
   }
 
-  .price-request-profile-overlay {
-    padding: 10px !important;
-    align-items: flex-end !important;
-  }
-
   .price-request-profile-modal {
-    width: 100% !important;
+    width: calc(100vw - 24px) !important;
     height: auto !important;
-    max-height: 92vh !important;
+    max-height: 88vh !important;
     overflow-y: auto !important;
-    border-radius: 24px 24px 0 0 !important;
+    border-radius: 24px !important;
   }
 
   .price-request-profile-hero {
@@ -990,8 +981,8 @@
 
 @media (max-width: 760px) {
   .price-request-profile-modal {
-    width: 100%;
-    max-height: none;
+    width: calc(100vw - 24px);
+    max-height: 88vh;
   }
 
   .price-request-profile-hero {
@@ -1166,12 +1157,13 @@
   }
 
   .price-request-history-overlay {
-    padding: 14px;
+    align-items: flex-end;
   }
 
   .price-request-history-modal {
-    width: 100%;
-    max-height: calc(100vh - 28px);
+    width: calc(100vw - 24px);
+    max-height: 88vh;
+    border-radius: 24px;
   }
 
   .history-modal-list {

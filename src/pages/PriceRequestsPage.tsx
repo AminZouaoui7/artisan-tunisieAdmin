@@ -24,6 +24,7 @@ import {
   type AdminPriceRequestListItem,
   type PriceRequestStatus,
 } from "../services/adminPriceRequestService";
+import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 
 import "../styles/PriceRequestsPage.css";
 
@@ -70,6 +71,10 @@ export default function PriceRequestsPage() {
 
   const [confirmSend, setConfirmSend] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
+
+  useBodyScrollLock(
+    Boolean(selectedRequest || detailsLoading || historyOpen || confirmSend)
+  );
 
   const filteredRequests = useMemo(() => {
     const s = search.trim().toLowerCase();
@@ -382,8 +387,8 @@ L’Artisan de la Médina`;
       )}
 
       {(selectedRequest || detailsLoading) && (
-        <div className="price-request-profile-overlay">
-          <section className="price-request-profile-modal price-request-modal-redesign">
+        <div className="price-request-profile-overlay admin-modal">
+          <section className="price-request-profile-modal price-request-modal-redesign admin-modal-content">
             {detailsLoading ? (
               <div className="price-request-profile-loading">
                 <Loader2 className="spin" size={34} />
@@ -468,7 +473,7 @@ L’Artisan de la Médina`;
                   </div>
                 </div>
 
-                <div className="price-request-profile-body price-request-body-redesign">
+                <div className="price-request-profile-body price-request-body-redesign admin-modal-body admin-modal-scrollbar">
                   <section className="price-request-panel premium-summary-panel">
                     <div className="price-request-panel-title premium-panel-title">
                       <div className="premium-title-icon">
@@ -581,8 +586,8 @@ L’Artisan de la Médina`;
       )}
 
       {historyOpen && selectedRequest && (
-        <div className="price-request-history-overlay">
-          <section className="price-request-history-modal">
+        <div className="price-request-history-overlay admin-modal">
+          <section className="price-request-history-modal admin-modal-content">
             <button
               type="button"
               className="price-request-history-close"
@@ -640,8 +645,8 @@ L’Artisan de la Médina`;
       )}
 
       {confirmSend && selectedRequest && (
-        <div className="price-request-confirm-overlay">
-          <section className="price-request-confirm-modal">
+        <div className="price-request-confirm-overlay admin-modal">
+          <section className="price-request-confirm-modal admin-modal-content">
             <div className="price-request-confirm-icon">
               <AlertTriangle size={26} />
             </div>
@@ -652,7 +657,7 @@ L’Artisan de la Médina`;
               la demande passera automatiquement en statut répondu.
             </p>
 
-            <div className="price-request-confirm-actions">
+            <div className="price-request-confirm-actions admin-modal-actions">
               <button
                 type="button"
                 disabled={actionLoading}
