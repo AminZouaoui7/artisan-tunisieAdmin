@@ -1436,3 +1436,78 @@
     radial-gradient(circle at top right, rgba(216, 120, 47, 0.14), transparent 38%),
     rgba(255, 253, 247, 0.96);
 }
+
+@media (max-width: 768px) {
+  .products-filter-card,
+  .products-filters,
+  .admin-products-filters,
+  .products-toolbar,
+  .filters-card {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    padding: 18px !important;
+    border-radius: 26px !important;
+    width: 100% !important;
+    overflow: visible !important;
+  }
+
+  .products-search-box,
+  .products-filter-card .products-search-box {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 52px !important;
+    height: 52px !important;
+    padding: 0 14px !important;
+    border-radius: 18px !important;
+    grid-column: 1 / -1 !important;
+  }
+
+  .products-search-box input,
+  .products-filter-card input,
+  .products-filter-card select,
+  .products-filter-card button,
+  .admin-products-filters input,
+  .admin-products-filters select,
+  .admin-products-filters button,
+  .products-toolbar input,
+  .products-toolbar select,
+  .products-toolbar button {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 52px !important;
+    border-radius: 18px !important;
+    font-size: 15px !important;
+  }
+
+  .products-search-box input {
+    padding-right: 90px !important;
+    font-size: 15px !important;
+  }
+
+  .products-filter-card select {
+    padding: 0 14px !important;
+  }
+
+  .products-search-clear {
+    width: 30px !important;
+    height: 30px !important;
+    margin-left: 8px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .products-search-loading {
+    right: 44px !important;
+    max-width: 110px !important;
+    text-align: right !important;
+    line-height: 1.2 !important;
+  }
+
+  .products-filter-card button,
+  .products-filter-card .filter-button,
+  .admin-products-filters .filter-button,
+  .products-toolbar .filter-button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}

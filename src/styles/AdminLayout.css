@@ -831,3 +831,127 @@ body,
 
   isolation: isolate;
 }
+
+@media (max-width: 768px) {
+  .admin-topbar-search,
+  .topbar-search,
+  .admin-search {
+    display: none !important;
+  }
+
+  .admin-topbar {
+    height: 78px !important;
+    padding: 12px 16px !important;
+    gap: 12px !important;
+    justify-content: space-between !important;
+    overflow: visible !important;
+  }
+
+  .admin-topbar-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    margin-left: auto !important;
+    overflow: visible !important;
+  }
+
+  .admin-topbar button,
+  .admin-topbar .icon-btn,
+  .admin-topbar .avatar-btn,
+  .admin-menu-btn,
+  .admin-bell-btn,
+  .admin-logout-btn {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    border-radius: 18px !important;
+  }
+
+  .admin-user {
+    gap: 0 !important;
+  }
+
+  .admin-user span {
+    display: none !important;
+  }
+
+  .admin-user-avatar {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    border-radius: 18px !important;
+    font-size: 14px !important;
+  }
+
+  .admin-notifications,
+  .admin-topbar,
+  .admin-topbar-actions {
+    overflow: visible !important;
+  }
+
+  .admin-notifications-dropdown,
+  .notifications-dropdown,
+  .notification-menu {
+    position: fixed !important;
+    top: 86px !important;
+    left: 12px !important;
+    right: 12px !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: calc(100dvh - 110px) !important;
+    overflow-y: auto !important;
+    border-radius: 24px !important;
+    z-index: 99999 !important;
+    transform: none !important;
+    right: 12px !important;
+  }
+
+  .admin-notifications-dropdown::before {
+    display: none !important;
+  }
+
+  .admin-notifications-list {
+    gap: 10px !important;
+  }
+
+  .notification-item,
+  .admin-notification-item,
+  .admin-notification-row {
+    display: grid !important;
+    grid-template-columns: 48px minmax(0, 1fr) auto !important;
+    gap: 12px !important;
+    align-items: center !important;
+    padding: 14px !important;
+  }
+
+  .admin-notification-icon {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 18px !important;
+  }
+
+  .notification-item *,
+  .admin-notification-item *,
+  .admin-notification-row *,
+  .admin-notifications-dropdown *,
+  .admin-notification-label {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+    word-break: break-word !important;
+  }
+
+  .admin-notification-label {
+    min-width: 0 !important;
+    line-height: 1.4 !important;
+    font-size: 14px !important;
+  }
+
+  .admin-notification-count {
+    align-self: start !important;
+  }
+
+  .admin-notification-row:hover {
+    transform: none !important;
+  }
+}
