@@ -837,164 +837,82 @@ body,
   isolation: isolate;
 }
 
+/* ✅ MOBILE NOTIFICATIONS — VERSION PROPRE */
 @media (max-width: 768px) {
-  .admin-topbar-search,
-  .topbar-search,
-  .admin-search {
-    display: none !important;
+  .admin-notifications {
+    position: static !important;
   }
 
-  .admin-topbar {
-    height: 78px !important;
-    padding: 12px 16px !important;
-    gap: 12px !important;
-    justify-content: space-between !important;
-    overflow: visible !important;
-  }
-
-  .admin-topbar-actions {
-    display: flex !important;
-    align-items: center !important;
-    gap: 10px !important;
-    margin-left: auto !important;
-    overflow: visible !important;
-  }
-
-  .admin-topbar button,
-  .admin-topbar .icon-btn,
-  .admin-topbar .avatar-btn,
-  .admin-menu-btn,
-  .admin-bell-btn,
-  .admin-logout-btn {
-    width: 48px !important;
-    height: 48px !important;
-    min-width: 48px !important;
-    border-radius: 18px !important;
-  }
-
-  .admin-user {
-    gap: 0 !important;
-  }
-
-  .admin-user span {
-    display: none !important;
-  }
-
-  .admin-user-avatar {
-    width: 48px !important;
-    height: 48px !important;
-    min-width: 48px !important;
-    border-radius: 18px !important;
-    font-size: 14px !important;
-  }
-
-  .admin-notifications,
-  .admin-topbar,
-  .admin-topbar-actions {
-    overflow: visible !important;
-  }
-
-  .admin-notifications-dropdown,
-  .notifications-dropdown,
-  .notification-menu {
+  .admin-notifications-dropdown {
     position: fixed !important;
-    top: 96px !important;
-    left: 16px !important;
-    right: 16px !important;
+    top: 92px !important;
+    left: 20px !important;
+    right: 20px !important;
     width: auto !important;
     max-width: none !important;
-    max-height: calc(100dvh - 130px) !important;
+    min-width: 0 !important;
+    max-height: calc(100vh - 140px) !important;
     overflow-y: auto !important;
-    overflow-x: hidden !important;
-    border-radius: 24px !important;
-    z-index: 99999 !important;
-    transform: none !important;
     padding: 22px !important;
-  }
-
-  .admin-notifications-dropdown::before {
-    display: none !important;
+    border-radius: 28px !important;
+    z-index: 99999 !important;
   }
 
   .admin-notifications-list {
-    gap: 10px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
   }
 
-  .notification-item,
-  .admin-notification-item,
   .admin-notification-row {
     width: 100% !important;
     min-width: 0 !important;
     display: flex !important;
-    flex-direction: row !important;
-    gap: 12px !important;
     align-items: center !important;
-    padding: 14px 0 !important;
+    gap: 14px !important;
+    padding: 14px !important;
+    border-radius: 20px !important;
   }
 
-  .notification-item-icon,
-  .admin-notification-icon,
-  .notification-icon {
-    flex: 0 0 48px !important;
+  .admin-notification-icon {
     width: 48px !important;
     height: 48px !important;
-    border-radius: 18px !important;
+    min-width: 48px !important;
+    flex: 0 0 48px !important;
   }
 
-  .notification-item-content,
-  .admin-notification-content,
-  .notification-content {
+  .admin-notification-content {
     flex: 1 1 auto !important;
     min-width: 0 !important;
-    width: auto !important;
-    display: block !important;
+    max-width: none !important;
   }
 
-  .notification-item-title,
-  .admin-notification-title,
-  .notification-title,
   .admin-notification-label {
     display: block !important;
     width: 100% !important;
-    white-space: normal !important;
-    word-break: normal !important;
-    overflow-wrap: normal !important;
+    font-size: 15px !important;
     line-height: 1.25 !important;
-  }
-
-  .notification-item *,
-  .admin-notification-item *,
-  .notification-row *,
-  .admin-notification-row * {
-    writing-mode: horizontal-tb !important;
-    text-orientation: mixed !important;
+    font-weight: 900 !important;
+    white-space: normal !important;
     word-break: normal !important;
     overflow-wrap: normal !important;
-    white-space: normal !important;
-    text-align: left !important;
-    overflow: visible !important;
-    text-overflow: unset !important;
+    hyphens: none !important;
   }
 
-  .notification-count,
-  .admin-notification-count,
-  .notification-badge {
-    flex: 0 0 auto !important;
-    min-width: 28px !important;
-    height: 28px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-
-  .admin-notification-row:hover {
-    transform: none !important;
+  .admin-notification-count {
+    flex: 0 0 34px !important;
+    min-width: 34px !important;
+    width: 34px !important;
+    height: 34px !important;
+    padding: 0 !important;
   }
 }
 /* ✅ FIX NOTIFICATIONS DROPDOWN MOBILE */
 .admin-notifications {
   position: relative;
 }
+
 
 .admin-notifications-dropdown {
   position: absolute;
@@ -1191,4 +1109,8 @@ body,
   left: 16px;
   right: 16px;
   width: auto;
+}
+.admin-notification-row * {
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
 }
