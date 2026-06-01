@@ -100,9 +100,9 @@ export default function PriceRequestsPage() {
     loadRequests();
   }, []);
 
-  const openDetailsPage = (id: string) => {
-    navigate(`/admin/price-requests/${id}`);
-  };
+ const openDetailsPage = (id: string) => {
+  navigate(`/price-requests/${id}`);
+};
 
   return (
     <main className="admin-price-requests-page">

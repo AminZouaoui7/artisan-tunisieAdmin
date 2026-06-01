@@ -8,6 +8,7 @@ import OrderDetailsPage from "./pages/OrderDetailsPage";
 import CustomersPage from "./pages/CustomersPage";
 import BookingsPage from "./pages/BookingsPage";
 import PriceRequestsPage from "./pages/PriceRequestsPage";
+import PriceRequestDetailsPage from "./pages/PriceRequestDetailsPage";
 
 import AdminLayout from "./components/AdminLayout";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
@@ -29,6 +30,7 @@ export default function App() {
           }
         >
           <Route index element={<Navigate to="/dashboard" replace />} />
+
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/products" element={<AdminProductsPage />} />
 
@@ -37,25 +39,25 @@ export default function App() {
 
           <Route path="/customers" element={<CustomersPage />} />
           <Route path="/bookings" element={<BookingsPage />} />
+
           <Route path="/price-requests" element={<PriceRequestsPage />} />
+          <Route
+            path="/price-requests/:id"
+            element={<PriceRequestDetailsPage />}
+          />
         </Route>
 
         <Route
           path="/"
           element={
-            <Navigate
-              to={isAuthenticated ? "/dashboard" : "/login"}
-              replace
-            />
+            <Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />
           }
         />
+
         <Route
           path="*"
           element={
-            <Navigate
-              to={isAuthenticated ? "/dashboard" : "/login"}
-              replace
-            />
+            <Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />
           }
         />
       </Routes>
