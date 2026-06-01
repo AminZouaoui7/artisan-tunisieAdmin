@@ -22,6 +22,7 @@ export default function AdminTopbar({
 }) {
   const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const previousTotalRef = useRef<number | null>(null);
 
   const [notifications, setNotifications] =
     useState<AdminNotificationSummary | null>(null);
@@ -56,6 +57,19 @@ export default function AdminTopbar({
   const loadNotifications = async () => {
     try {
       const data = await getAdminNotificationSummary();
+
+      const newTotal =
+        data.pendingOrders +
+        data.pendingBookings +
+        data.pendingPriceRequests;
+
+      const previousTotal = previousTotalRef.current;
+
+      if (previousTotal !== null && newTotal > previousTotal) {
+        setOpenNotifications(true);
+      }
+
+      previousTotalRef.current = newTotal;
       setNotifications(data);
     } catch {
       setNotifications(null);
@@ -69,7 +83,24 @@ export default function AdminTopbar({
       loadNotifications();
     }, 30000);
 
-    return () => window.clearInterval(intervalId);
+    const handleFocus = () => {
+      loadNotifications();
+    };
+
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        loadNotifications();
+      }
+    };
+
+    window.addEventListener("focus", handleFocus);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.clearInterval(intervalId);
+      window.removeEventListener("focus", handleFocus);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, []);
 
   useEffect(() => {
@@ -129,7 +160,9 @@ export default function AdminTopbar({
               <div className="admin-notifications-header">
                 <div>
                   <strong>Notifications</strong>
-                  <span>{total} élément{total > 1 ? "s" : ""} à traiter</span>
+                  <span>
+                    {total} élément{total > 1 ? "s" : ""} à traiter
+                  </span>
                 </div>
               </div>
 
