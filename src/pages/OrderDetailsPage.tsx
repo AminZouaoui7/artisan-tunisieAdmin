@@ -3,6 +3,7 @@ import {
   CalendarDays,
   CheckCircle2,
   CreditCard,
+  Download,
   Loader2,
   Mail,
   MapPin,
@@ -14,7 +15,10 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import { adminFetch, buildBackendUrl } from "../services/adminApi";
+import logoMain from "../assets/color white.png";
 import "../styles/OrderDetailsPage.css";
 
 type OrderItem = {
@@ -86,6 +90,7 @@ export default function OrderDetailsPage() {
 
   const [order, setOrder] = useState<OrderDetails | null>(null);
   const [loading, setLoading] = useState(true);
+  const [generatingInvoice, setGeneratingInvoice] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -126,6 +131,159 @@ export default function OrderDetailsPage() {
     if (!order) return "";
     return order.publicReference || order.id;
   }, [order]);
+
+  const getImageBase64 = async (src: string): Promise<string | null> => {
+    try {
+      const response = await fetch(src);
+      const blob = await response.blob();
+
+      return await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = () => resolve(null);
+        reader.readAsDataURL(blob);
+      });
+    } catch {
+      return null;
+    }
+  };
+
+  const generateInvoicePdf = async () => {
+    if (!order) return;
+
+    try {
+      setGeneratingInvoice(true);
+
+      const doc = new jsPDF("p", "mm", "a4");
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const invoiceRef =
+        order.invoiceNumber ||
+        `INV-${reference.toString().slice(0, 8).toUpperCase()}`;
+
+      const logoBase64 = await getImageBase64(logoMain);
+
+      doc.setFillColor(43, 22, 8);
+      doc.rect(0, 0, pageWidth, 42, "F");
+
+      if (logoBase64) {
+        doc.addImage(logoBase64, "PNG", 14, 9, 34, 22);
+      }
+
+      doc.setTextColor(255, 255, 255);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(22);
+      doc.text("FACTURE", pageWidth - 14, 18, { align: "right" });
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+      doc.text(`N° ${invoiceRef}`, pageWidth - 14, 27, { align: "right" });
+      doc.text(`Date : ${formatDate(new Date().toISOString())}`, pageWidth - 14, 34, {
+        align: "right",
+      });
+
+      doc.setTextColor(43, 22, 8);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(13);
+      doc.text("L’ARTISAN DE LA MÉDINA", 14, 55);
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+      doc.text("Artisanat tunisien premium", 14, 62);
+      doc.text("Tunis, Tunisie", 14, 68);
+      doc.text("Email : contact@artisanmedina.com", 14, 74);
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(12);
+      doc.text("Facturé à", pageWidth - 80, 55);
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+      doc.text(`${order.firstName} ${order.lastName}`, pageWidth - 80, 62);
+      doc.text(order.email, pageWidth - 80, 68);
+      doc.text(order.phone, pageWidth - 80, 74);
+      doc.text(order.addressLine1, pageWidth - 80, 80);
+
+      if (order.addressLine2) {
+        doc.text(order.addressLine2, pageWidth - 80, 86);
+      }
+
+      doc.text(
+        `${order.postalCode} ${order.city}, ${order.country}`,
+        pageWidth - 80,
+        order.addressLine2 ? 92 : 86
+      );
+
+      autoTable(doc, {
+        startY: 105,
+        head: [["Produit", "Qté", "Prix unitaire", "Total"]],
+        body: order.items.map((item) => [
+          `${item.productName}\nProduit #${item.productId}`,
+          item.quantity.toString(),
+          formatPrice(item.unitPrice, order.currency),
+          formatPrice(item.totalPrice, order.currency),
+        ]),
+        theme: "grid",
+        headStyles: {
+          fillColor: [43, 22, 8],
+          textColor: [255, 255, 255],
+          fontStyle: "bold",
+        },
+        styles: {
+          fontSize: 10,
+          cellPadding: 4,
+          textColor: [43, 22, 8],
+        },
+        columnStyles: {
+          0: { cellWidth: 90 },
+          1: { halign: "center", cellWidth: 20 },
+          2: { halign: "right", cellWidth: 35 },
+          3: { halign: "right", cellWidth: 35 },
+        },
+      });
+
+      const finalY = (doc as any).lastAutoTable.finalY + 10;
+
+      doc.setFillColor(247, 236, 210);
+      doc.roundedRect(pageWidth - 82, finalY, 68, 26, 3, 3, "F");
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(11);
+      doc.text("Total commande", pageWidth - 76, finalY + 10);
+
+      doc.setFontSize(16);
+      doc.text(formatPrice(order.totalAmount, order.currency), pageWidth - 18, finalY + 20, {
+        align: "right",
+      });
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+      doc.text(`Commande : ${reference}`, 14, finalY + 8);
+      doc.text(`Statut commande : ${statusLabel[order.status] ?? order.status}`, 14, finalY + 15);
+      doc.text(
+        `Statut paiement : ${paymentLabel[order.paymentStatus] ?? order.paymentStatus}`,
+        14,
+        finalY + 22
+      );
+      doc.text(`Méthode paiement : ${order.paymentMethod}`, 14, finalY + 29);
+      doc.text(`Payé le : ${formatDate(order.paidAt)}`, 14, finalY + 36);
+
+      doc.setDrawColor(185, 119, 53);
+      doc.line(14, 280, pageWidth - 14, 280);
+
+      doc.setFontSize(9);
+      doc.setTextColor(90, 75, 60);
+      doc.text(
+        "Merci pour votre confiance. Cette facture a été générée automatiquement depuis l’espace administrateur.",
+        pageWidth / 2,
+        288,
+        { align: "center" }
+      );
+
+      doc.save(`facture-${invoiceRef}.pdf`);
+    } finally {
+      setGeneratingInvoice(false);
+    }
+  };
 
   const timeline = useMemo(() => {
     if (!order) return [];
@@ -220,6 +378,20 @@ export default function OrderDetailsPage() {
               {shippingLabel[order.shippingStatus] ?? order.shippingStatus}
             </span>
           </div>
+
+          <button
+            className="order-invoice-btn"
+            type="button"
+            onClick={generateInvoicePdf}
+            disabled={generatingInvoice}
+          >
+            {generatingInvoice ? (
+              <Loader2 className="spin" size={18} />
+            ) : (
+              <Download size={18} />
+            )}
+            Générer la facture PDF
+          </button>
         </div>
 
         <div className="order-total-card">
@@ -395,8 +567,6 @@ export default function OrderDetailsPage() {
           <strong>{formatPrice(order.totalAmount, order.currency)}</strong>
         </div>
       </section>
-
-      
     </div>
   );
 }

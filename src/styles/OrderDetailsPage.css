@@ -693,3 +693,31 @@
   color: #8e4039;
   background: rgba(159, 79, 73, 0.2);
 }
+
+.order-invoice-btn {
+  margin-top: 22px;
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 18px;
+  background: linear-gradient(135deg, #f8e2b2, #b97735);
+  color: #2b1608;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 14px 32px rgba(43, 22, 8, 0.28);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.order-invoice-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgba(43, 22, 8, 0.36);
+}
+
+.order-invoice-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
