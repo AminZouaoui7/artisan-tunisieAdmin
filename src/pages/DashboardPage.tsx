@@ -2,14 +2,17 @@ import { useEffect, useMemo, useState } from "react";
 import {
   AlertTriangle,
   CalendarDays,
-  Eye,
-  Loader2,
+  ChevronDown,
+  Gem,
+  MoreHorizontal,
   Package,
+  Search,
   ShoppingBag,
+  Sparkles,
+  Truck,
   Users,
   Wallet,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
 import { getAdminDashboard } from "../services/adminDashboardService";
 import type { AdminDashboardDto } from "../types/adminDashboardTypes";
@@ -23,9 +26,7 @@ function formatMoney(value: number, currency = "EUR") {
   }).format(value || 0);
 }
 
-function formatDate(value?: string) {
-  if (!value) return "-";
-
+function formatDate(value: string) {
   return new Intl.DateTimeFormat("fr-FR", {
     day: "2-digit",
     month: "short",
@@ -36,24 +37,14 @@ function formatDate(value?: string) {
 function statusClass(value?: string) {
   const v = (value || "").toLowerCase();
 
-  if (v.includes("paid") || v.includes("confirmed") || v.includes("shipped")) {
-    return "success";
-  }
-
-  if (v.includes("pending") || v.includes("attente")) {
-    return "pending";
-  }
-
-  if (v.includes("cancel") || v.includes("unpaid") || v.includes("annul")) {
-    return "danger";
-  }
+  if (v.includes("paid") || v.includes("confirmed") || v.includes("shipped")) return "success";
+  if (v.includes("pending")) return "pending";
+  if (v.includes("cancel") || v.includes("unpaid") || v.includes("sold")) return "danger";
 
   return "neutral";
 }
 
 export default function AdminDashboard() {
-  const navigate = useNavigate();
-
   const [dashboard, setDashboard] = useState<AdminDashboardDto | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -74,26 +65,30 @@ export default function AdminDashboard() {
       {
         label: "Revenus payés",
         value: formatMoney(stats.paidRevenue),
-        detail: `${stats.paidOrders} commande(s) payée(s)`,
+        detail: `${stats.paidOrders} commandes payées`,
         icon: Wallet,
+        tone: "purple",
       },
       {
         label: "Commandes",
         value: stats.totalOrders,
         detail: `${stats.pendingOrders} en attente`,
         icon: ShoppingBag,
+        tone: "blue",
       },
       {
-        label: "Produits actifs",
-        value: stats.activeProducts,
-        detail: `${stats.totalProducts} produit(s) au total`,
+        label: "Produits",
+        value: stats.totalProducts,
+        detail: `${stats.activeProducts} actifs`,
         icon: Package,
+        tone: "orange",
       },
       {
         label: "Clients",
         value: stats.totalCustomers,
         detail: "Clients inscrits",
         icon: Users,
+        tone: "pink",
       },
     ];
   }, [dashboard]);
@@ -101,10 +96,7 @@ export default function AdminDashboard() {
   if (loading) {
     return (
       <main className="admin-dashboard-page">
-        <div className="dashboard-state-card">
-          <Loader2 className="spin" size={28} />
-          Chargement du dashboard...
-        </div>
+        <div className="dashboard-state-card">Chargement du dashboard...</div>
       </main>
     );
   }
@@ -121,49 +113,47 @@ export default function AdminDashboard() {
 
   return (
     <main className="admin-dashboard-page">
-      <section className="dashboard-header">
+      <section className="dashboard-topbar">
         <div>
-          <p>Artisan Medina Admin</p>
-          <h1>Tableau de bord</h1>
-          <span>Vue simple des éléments importants à suivre.</span>
+          <p className="dashboard-kicker">Artisan Medina Admin</p>
+          <h1>Dashboard</h1>
+        </div>
+
+        <div className="dashboard-search">
+          <Search size={18} />
+          <input placeholder="Rechercher commande, client, produit..." />
         </div>
       </section>
 
-      {(stats.pendingOrders > 0 ||
-        stats.pendingPriceRequests > 0 ||
-        stats.pendingDemoBookings > 0) && (
-        <section className="dashboard-alerts-simple">
-          {stats.pendingOrders > 0 && (
-            <button onClick={() => navigate("/orders")}>
-              <AlertTriangle size={18} />
-              <span>{stats.pendingOrders} commande(s) en attente</span>
-            </button>
-          )}
-
-          {stats.pendingPriceRequests > 0 && (
-            <button onClick={() => navigate("/price-requests")}>
-              <AlertTriangle size={18} />
-              <span>{stats.pendingPriceRequests} demande(s) de prix</span>
-            </button>
-          )}
-
-          {stats.pendingDemoBookings > 0 && (
-            <button onClick={() => navigate("/bookings")}>
-              <CalendarDays size={18} />
-              <span>{stats.pendingDemoBookings} réservation(s) showroom</span>
-            </button>
-          )}
+      {dashboard.alerts.length > 0 && (
+        <section className="dashboard-alerts">
+          {dashboard.alerts.map((alert) => (
+            <div className="dashboard-alert" key={alert.type}>
+              <span className="dashboard-alert-icon">
+                <AlertTriangle size={17} />
+              </span>
+              <div>
+                <strong>{alert.message}</strong>
+                <small>{alert.count} élément(s) à traiter</small>
+              </div>
+              <em>{alert.count}</em>
+            </div>
+          ))}
         </section>
       )}
 
-      <section className="dashboard-simple-stats">
+      <section className="dashboard-stats-grid">
         {statsCards.map((card) => {
           const Icon = card.icon;
 
           return (
-            <article key={card.label} className="dashboard-simple-card">
-              <div className="dashboard-simple-icon">
-                <Icon size={22} />
+            <article className="dashboard-stat-card" key={card.label}>
+              <button className="card-more" type="button">
+                <MoreHorizontal size={20} />
+              </button>
+
+              <div className={`dashboard-stat-icon ${card.tone}`}>
+                <Icon size={24} />
               </div>
 
               <div>
@@ -176,33 +166,85 @@ export default function AdminDashboard() {
         })}
       </section>
 
-      <section className="dashboard-content-grid">
-        <article className="dashboard-simple-panel">
-          <div className="dashboard-panel-title">
-            <div>
-              <h2>Dernières commandes</h2>
-              <span>{dashboard.recentOrders.length} récente(s)</span>
-            </div>
-
-            <button onClick={() => navigate("/orders")}>
-              Voir tout
-              <Eye size={16} />
+      <section className="dashboard-main-grid">
+        <article className="dashboard-panel trend-panel">
+          <div className="dashboard-panel-header">
+            <h2>Commandes & produits</h2>
+            <button type="button">
+              Vue globale <ChevronDown size={15} />
             </button>
           </div>
 
-          <div className="dashboard-table">
+          <div className="dashboard-chart-area">
+            <div className="fake-bars">
+              {[
+                [45, 70],
+                [64, 86],
+                [38, 58],
+                [71, 44],
+                [52, 76],
+                [78, 91],
+              ].map(([a, b], index) => (
+                <div className="bar-group" key={index}>
+                  <span style={{ height: `${a}%` }} />
+                  <strong style={{ height: `${b}%` }} />
+                </div>
+              ))}
+            </div>
+
+            <div className="dashboard-donut">
+              <div className="donut-ring">
+                <div className="donut-center">
+                  <Package size={22} />
+                  <strong>{stats.activeProducts}</strong>
+                </div>
+              </div>
+
+              <div className="donut-legend">
+                <span><i className="purple-dot" /> Actifs</span>
+                <span><i className="green-dot" /> Réservés</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article className="dashboard-panel gender-panel">
+          <div className="dashboard-panel-header">
+            <h2>État produits</h2>
+          </div>
+
+          <div className="mini-donut">
+            <div className="mini-donut-center">
+              <Gem size={24} />
+            </div>
+          </div>
+
+          <div className="product-state-list">
+            <span><i className="green-dot" /> Featured : {stats.featuredProducts}</span>
+            <span><i className="purple-dot" /> Réservés : {stats.reservedProducts}</span>
+            <span><i className="orange-dot" /> Vendus/Rupture : {stats.soldOutProducts}</span>
+          </div>
+        </article>
+
+        <article className="dashboard-panel orders-panel">
+          <div className="dashboard-panel-header">
+            <h2>Dernières commandes</h2>
+            <span>{dashboard.recentOrders.length} récentes</span>
+          </div>
+
+          <div className="dashboard-orders-list">
             {dashboard.recentOrders.length === 0 && (
-              <p className="dashboard-empty">Aucune commande récente.</p>
+              <p className="empty-text">Aucune commande récente.</p>
             )}
 
             {dashboard.recentOrders.map((order) => (
-              <div className="dashboard-table-row" key={order.id}>
+              <div className="dashboard-order-row" key={order.id}>
                 <div>
-                  <strong>{order.customerName}</strong>
-                  <span>{order.email}</span>
+                  <strong>#{order.id} — {order.customerName}</strong>
+                  <small>{order.email}</small>
                 </div>
 
-                <strong>{formatMoney(order.totalAmount, order.currency || "EUR")}</strong>
+                <span>{formatMoney(order.totalAmount, order.currency || "EUR")}</span>
 
                 <em className={`status-pill ${statusClass(order.paymentStatus)}`}>
                   {order.paymentStatus}
@@ -214,39 +256,80 @@ export default function AdminDashboard() {
           </div>
         </article>
 
-        <article className="dashboard-simple-panel">
-          <div className="dashboard-panel-title">
-            <div>
-              <h2>À traiter</h2>
-              <span>Demandes importantes</span>
-            </div>
+        <article className="dashboard-panel division-panel">
+          <div className="dashboard-panel-header">
+            <h2>Demandes & showroom</h2>
           </div>
 
-          <div className="dashboard-actions-list">
-            <button onClick={() => navigate("/orders")}>
-              <ShoppingBag size={18} />
-              <span>Commandes en attente</span>
-              <strong>{stats.pendingOrders}</strong>
-            </button>
-
-            <button onClick={() => navigate("/price-requests")}>
-              <Wallet size={18} />
+          <div className="division-list">
+            <div className="division-row">
+              <Wallet size={19} />
               <span>Demandes de prix</span>
               <strong>{stats.pendingPriceRequests}</strong>
-            </button>
+            </div>
 
-            <button onClick={() => navigate("/bookings")}>
-              <CalendarDays size={18} />
+            <div className="division-row">
+              <CalendarDays size={19} />
               <span>Réservations showroom</span>
               <strong>{stats.pendingDemoBookings}</strong>
-            </button>
+            </div>
 
-            <button onClick={() => navigate("/products")}>
-              <Package size={18} />
-              <span>Produits réservés</span>
-              <strong>{stats.reservedProducts}</strong>
-            </button>
+            <div className="division-row">
+              <Truck size={19} />
+              <span>Expéditions</span>
+              <strong>{stats.shippedOrders}</strong>
+            </div>
           </div>
+        </article>
+
+        <article className="dashboard-highlight-card">
+          <Sparkles size={28} />
+          <strong>{stats.pendingOrders}</strong>
+          <span>Commandes en attente</span>
+
+          <div className="highlight-wave">
+            <span />
+          </div>
+        </article>
+
+        <article className="dashboard-panel mini-panel">
+          <div className="dashboard-panel-header">
+            <h2>Demandes de prix</h2>
+          </div>
+
+          {dashboard.recentPriceRequests.length === 0 && (
+            <p className="empty-text">Aucune demande récente.</p>
+          )}
+
+          {dashboard.recentPriceRequests.map((request) => (
+            <div className="mini-item" key={request.id}>
+              <div>
+                <strong>{request.customerName}</strong>
+                <span>{request.productName}</span>
+              </div>
+              <small>{request.status} · {formatDate(request.createdAt)}</small>
+            </div>
+          ))}
+        </article>
+
+        <article className="dashboard-panel mini-panel">
+          <div className="dashboard-panel-header">
+            <h2>Réservations showroom</h2>
+          </div>
+
+          {dashboard.recentDemoBookings.length === 0 && (
+            <p className="empty-text">Aucune réservation récente.</p>
+          )}
+
+          {dashboard.recentDemoBookings.map((booking) => (
+            <div className="mini-item" key={booking.id}>
+              <div>
+                <strong>{booking.fullName}</strong>
+                <span>{booking.demoDate} à {booking.demoTime}</span>
+              </div>
+              <small>{booking.status} · {formatDate(booking.createdAt)}</small>
+            </div>
+          ))}
         </article>
       </section>
     </main>
