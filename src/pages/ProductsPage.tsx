@@ -128,6 +128,7 @@ type AdminProduct = {
   mainImageUrl?: string | null;
   images: ProductImage[];
   createdAt: string;
+  variantGroupKey?: string | null;
 };
 
 type ProductsResponse = {
@@ -167,6 +168,7 @@ type ProductForm = {
   isHandmade: boolean;
   isUniquePiece: boolean;
   isPriceOnRequestOnlyInTunisia: boolean;
+  variantGroupKey: string;
 };
 
 const emptyForm: ProductForm = {
@@ -198,6 +200,7 @@ const emptyForm: ProductForm = {
   isHandmade: true,
   isUniquePiece: true,
 isPriceOnRequestOnlyInTunisia: true,
+variantGroupKey: "",
 };
 
 const statusLabels: Record<ProductStatus, string> = {
@@ -511,6 +514,7 @@ export default function AdminProductsPage() {
       isHandmade: Boolean(product.isHandmade),
       isUniquePiece: Boolean(product.isUniquePiece),
       isPriceOnRequestOnlyInTunisia: product.isPriceOnRequestOnlyInTunisia ?? true,
+      variantGroupKey: product.variantGroupKey || "",
     });
 
     setIsModalOpen(true);
@@ -571,6 +575,7 @@ const buildPayload = () => ({
       sortOrder: img.sortOrder,
       isMain: img.isMain,
     })) || [],
+  variantGroupKey: form.variantGroupKey || "",
 });
 
   const uploadImages = async (productId: number) => {
@@ -1268,6 +1273,14 @@ const buildPayload = () => ({
               <div className="product-form-grid">
                 <label>Nom du produit *<input value={form.name} onChange={(e) => updateForm("name", e.target.value)} /></label>
                 <label>Slug *<input value={form.slug} onChange={(e) => updateForm("slug", e.target.value)} /></label>
+                <label>
+  Groupe variantes
+  <input
+    value={form.variantGroupKey}
+    onChange={(e) => updateForm("variantGroupKey", e.target.value)}
+    placeholder="ex: tapis-noir-losange-001"
+  />
+</label>
                 <label>Catégorie<input value={form.category} onChange={(e) => updateForm("category", e.target.value)} /></label>
                 <label>Type<input value={form.type} onChange={(e) => updateForm("type", e.target.value)} /></label>
                 <label>Région<input value={form.region} onChange={(e) => updateForm("region", e.target.value)} /></label>
