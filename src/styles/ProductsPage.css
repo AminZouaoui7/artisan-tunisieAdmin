@@ -115,104 +115,40 @@
   position: relative;
 }
 
-.products-search-box input,
-.products-filter-card select {
-  width: 100%;
-  height: 48px;
-  border: 0;
-  outline: 0;
-  border-radius: 16px;
-  background: #f6f7fb;
-  color: #62687d;
-  font-weight: 700;
-}
-
-.products-search-box input {
-  height: auto;
-  background: transparent;
-  padding-right: 128px;
-}
-
-.products-search-clear {
-  width: 26px;
-  height: 26px;
-  border: 0;
-  border-radius: 999px;
-  display: grid;
-  place-items: center;
-  color: #6f7488;
-  background: #eceff7;
-  cursor: pointer;
-  margin-left: auto;
-}
-
-.products-search-loading {
-  position: absolute;
-  right: 46px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 0.01em;
-  color: #7c3aed;
-}
-
-.products-filter-card button {
-  height: 48px;
-  padding: 0 18px;
-  border: 0;
-  border-radius: 16px;
-  background: #202235;
-  color: #fff;
-  font-weight: 900;
-  cursor: pointer;
-}
-
-.products-filter-card .products-light-btn {
-  background: #f2eaff;
-  color: #742cf3;
-}
-
 /* PRODUCT CARDS */
 
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(320px, 1fr));
-  gap: 28px;
-  align-items: start;
+  grid-template-columns: repeat(3, minmax(340px, 1fr));
+  gap: 22px;
 }
 
 .product-admin-card {
   overflow: hidden;
-  border-radius: 34px;
-  background: #fffdf7;
-  box-shadow: 0 20px 48px rgba(31, 28, 24, 0.09);
-  transition: box-shadow 0.2s ease;
-  max-width: 420px;
-  padding: 16px;
-  border: 1px solid rgba(47, 99, 113, 0.14);
+  border-radius: 30px;
+  background: #ffffff;
+  box-shadow: 0 18px 45px rgba(33, 38, 69, 0.07);
+  transition: all 0.25s ease;
 }
 
 .product-admin-card:hover {
-  box-shadow: 0 26px 56px rgba(33, 38, 69, 0.12);
+  transform: translateY(-4px);
+  box-shadow: 0 24px 55px rgba(33, 38, 69, 0.12);
 }
 
 .product-admin-image {
   position: relative;
-  height: 330px;
-  background: rgba(231, 230, 194, 0.4);
+  height: 230px;
+  background: #f2eaff;
   display: grid;
   place-items: center;
-  color: var(--am-teal);
   overflow: hidden;
-  border-radius: 24px;
 }
 
 .product-admin-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 24px;
 }
 
 .product-status {
@@ -224,6 +160,7 @@
   font-size: 12px;
   font-weight: 900;
   color: #fff;
+  background: #742cf3;
   backdrop-filter: blur(14px);
 }
 
@@ -244,13 +181,13 @@
 }
 
 .product-admin-body {
-  padding: 22px 4px 0;
-  text-align: left;
+  padding: 20px;
+  text-align: center;
 }
 
 .product-admin-body h3 {
   margin: 0;
-  color: #36272b;
+  color: #202235;
   font-size: 18px;
   font-weight: 950;
 }
@@ -258,39 +195,41 @@
 .product-admin-body small {
   display: block;
   margin-top: 6px;
-  color: #7d7266;
+  color: #9aa0b4;
   font-weight: 800;
 }
 
 .product-admin-actions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
   margin-top: 18px;
-  display: grid;
-  grid-template-columns: 1.1fr 1.1fr 48px;
-  gap: 10px;
 }
 
 .product-admin-actions button {
-  width: 100%;
-  height: 58px;
+  flex: 1;
   min-width: 0;
-  border-radius: 22px;
-  white-space: nowrap;
+  height: 44px;
   border: 0;
-  background: rgba(47, 99, 113, 0.14);
-  color: var(--am-teal);
+  border-radius: 15px;
+  background: #f2eaff;
+  color: #742cf3;
   font-weight: 900;
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  gap: 7px;
   cursor: pointer;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .product-admin-actions button:hover:not(:disabled) {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
+.product-admin-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 .product-admin-actions button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -1519,87 +1458,4 @@
     width: 100% !important;
     justify-content: center !important;
   }
-}
-
-/* FIX PREMIUM CARD ACTIONS + BADGE */
-
-.product-status {
-  top: 18px !important;
-  right: 18px !important;
-  left: auto !important;
-  padding: 9px 18px !important;
-  font-size: 12px !important;
-  letter-spacing: 0.12em !important;
-  border-radius: 18px !important;
-  max-width: 190px !important;
-  height: auto !important;
-  line-height: 1 !important;
-  background: linear-gradient(135deg, #b55a31, #8f351f) !important;
-  box-shadow: 0 10px 22px rgba(122, 55, 28, 0.25) !important;
-}
-
-.product-admin-footer {
-  margin-top: 24px !important;
-  padding: 16px !important;
-  border-radius: 26px !important;
-  border: 1px solid rgba(169, 79, 43, 0.16) !important;
-  background: #fffaf2 !important;
-  display: grid !important;
-  grid-template-columns: 0.75fr 1fr 0.9fr !important;
-  gap: 12px !important;
-  align-items: center !important;
-  overflow: hidden !important;
-}
-
-.product-admin-price {
-  min-width: 0 !important;
-}
-
-.product-admin-price span {
-  font-size: 11px !important;
-  letter-spacing: 0.18em !important;
-  color: #8d8177 !important;
-}
-
-.product-admin-price strong {
-  font-size: 36px !important;
-  line-height: 1 !important;
-  color: #111 !important;
-}
-
-.product-admin-actions {
-  display: contents !important;
-  margin: 0 !important;
-}
-
-.product-admin-actions button {
-  height: 50px !important;
-  min-width: 0 !important;
-  width: 100% !important;
-  padding: 0 14px !important;
-  border-radius: 18px !important;
-  font-size: 15px !important;
-  font-weight: 900 !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-}
-
-.product-admin-actions button:first-child {
-  background: #fffaf2 !important;
-  color: #7b2d1c !important;
-  border: 1px solid #8f351f !important;
-}
-
-.product-admin-actions button:nth-child(2) {
-  background: linear-gradient(135deg, #bd5a2f, #8f351f) !important;
-  color: #fff !important;
-  border: 1px solid transparent !important;
-  box-shadow: 0 12px 24px rgba(143, 53, 31, 0.22) !important;
-}
-
-.product-admin-actions button:nth-child(2)::before {
-  content: "🛍️";
-  font-size: 17px;
-  margin-right: 6px;
 }
